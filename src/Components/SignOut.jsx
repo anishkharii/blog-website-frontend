@@ -14,7 +14,7 @@ const SignOut = ({ setIsLoggedIn, onTriggerNotification }) => {
 
     // Trigger a notification
     onTriggerNotification({
-      type: "success",
+      type: "info",
       message: "You have successfully logged out.",
       duration: 3000,
     });

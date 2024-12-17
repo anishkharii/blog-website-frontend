@@ -12,7 +12,7 @@ const OtpVerificationPage = ({ onTriggerNotification }) => {
   async function handleSubmit(e) {
     try {
       e.preventDefault();
-      const res = await fetch(`http://localhost:8080/verify-author/${id}`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/verify-user/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

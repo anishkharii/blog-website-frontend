@@ -20,10 +20,10 @@ const HomePage = ({ setIsLoggedIn}) => {
       navigate("/login");
     } else {
       const fetchUserDetails = async () => {
-        const res = await fetch(`http://localhost:8080/author/${userId}`);
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/${userId}`);
         const data = await res.json();
         const userData ={
-          name:data.author.fname+" "+data.author.lname,
+          name:data.user.fname+" "+data.user.lname,
           email:data.email
         }
         setUserDetails(userData);

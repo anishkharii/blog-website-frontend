@@ -15,28 +15,45 @@ import SignOut from "./Components/SignOut";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const {NotificationComponent, TriggerNotification} = useNotification();
-  
+  const { NotificationComponent, TriggerNotification } = useNotification();
   return (
     <BrowserRouter>
-      <Navbar isLoggedIn={isLoggedIn} onTriggerNotification={TriggerNotification} setIsLoggedIn={setIsLoggedIn} />
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        onTriggerNotification={TriggerNotification}
+        setIsLoggedIn={setIsLoggedIn}
+      />
       {NotificationComponent}
       <Routes>
-        <Route path="/logIn" element={<LoginPage onTriggerNotification={TriggerNotification} />} />
-        <Route path="/signUp" element={<SignupPage onTriggerNotification={TriggerNotification}/>} />
-        <Route path="/otp-verification/:id" element={<OtpVerificationPage onTriggerNotification={TriggerNotification} />} />
+        <Route
+          path="/logIn"
+          element={<LoginPage onTriggerNotification={TriggerNotification} />}
+        />
+        <Route
+          path="/signUp"
+          element={<SignupPage onTriggerNotification={TriggerNotification} />}
+        />
+        <Route
+          path="/otp-verification/:id"
+          element={
+            <OtpVerificationPage onTriggerNotification={TriggerNotification} />
+          }
+        />
         <Route path="/blogs" element={<BlogsPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-        <Route path="/sign-out" element={<SignOut setIsLoggedIn={setIsLoggedIn} onTriggerNotification={TriggerNotification} />} />
         <Route
-          path="/"
+          path="/sign-out"
           element={
-            <HomePage setIsLoggedIn={setIsLoggedIn} />
+            <SignOut
+              setIsLoggedIn={setIsLoggedIn}
+              onTriggerNotification={TriggerNotification}
+            />
           }
         />
+        <Route path="/" element={<HomePage setIsLoggedIn={setIsLoggedIn} />} />
       </Routes>
     </BrowserRouter>
   );

@@ -7,7 +7,7 @@ const Background = ({top, left}) => {
       width="100%"
       height="100%"
       viewBox="0 0 1000 1000"
-      className={` absolute top-[${top}px] left-[${left}px] w-full h-full -z-10`}
+      className={` absolute top-[${top}px] left-[${left}px] w-full h-full -z-10 scale-150 md:scale-100`}
     >
       <defs>
         <filter
@@ -51,7 +51,7 @@ const Background = ({top, left}) => {
       <g>
         <g filter="url(#blur)">
           <g
-            transform="translate(111.06483536295877, 98.4162318646093)"
+            // transform="translate(111.06483536295877, 98.4162318646093)"
             opacity="0.7"
           >
             <svg

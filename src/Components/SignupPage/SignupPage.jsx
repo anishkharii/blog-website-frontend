@@ -27,7 +27,7 @@ const SignupPage = ({ onTriggerNotification}) => {
   async function handleSubmit(e) {
     e.preventDefault();
     try{
-      const res = await fetch("http://localhost:8080/add-author", {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/add-user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const SignupPage = ({ onTriggerNotification}) => {
   }
   return (
     <div className="text-white text-center  flex flex-col md:items-center md:justify-center h-[120vh] md:h-[90vh] w-10/12 md:w-auto mt-10 md:mt-auto  mx-auto">
-      <Background top={-200} left={250} />
+      <Background top={0} left={250} />
       <div className=" border border-white/20 bg-[#09090b]  rounded-lg p-5">
      
 
