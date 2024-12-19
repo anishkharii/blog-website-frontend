@@ -1,34 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Footer from "./MainPages/Footer";
-import Input from "./UI/Input";
-import Background from "./LoginPage/Background";
+import React, { useEffect, useState } from 'react'
+import Background from '../LoginPage/Background'
+import Input from '../UI/Input'
+import Footer from '../MainPages/Footer';
 
-const HomePage = ({ setIsLoggedIn}) => {
-  const navigate = useNavigate();
-  const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("userToken");
-  const [userDetails, setUserDetails] = useState({ name: "", email: ""});
-  const [blogs, setBlogs] = useState([]);
+const UserPage = ({  setIsAuthenticated, userDetails }) => {
+    const [blogs, setBlogs] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-
-
-
   
   useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    } else {
-      const fetchUserDetails = async () => {
-        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/${userId}`);
-        const data = await res.json();
-        const userData ={
-          name:data.user.fname+" "+data.user.lname,
-          email:data.email
-        }
-        setUserDetails(userData);
-        setIsLoggedIn(true);
-      };
+    
     
       const fetchBlogs = async () => {
         // Replace with API call
@@ -55,10 +35,9 @@ const HomePage = ({ setIsLoggedIn}) => {
         setBlogs(mockBlogs);
       };
 
-      fetchUserDetails();
       fetchBlogs();
-    }
-  }, [token, navigate, setIsLoggedIn, userId]);
+    
+  }, [ setIsAuthenticated]);
 
 
 
@@ -69,20 +48,19 @@ const HomePage = ({ setIsLoggedIn}) => {
   const filteredBlogs = blogs.filter((blog) =>
     blog.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
   return (
     <div className="flex flex-col min-h-screen text-white">
       
 
       {/* Welcome Section */}
-      <section className=" py-8 px-6 text-center">
         <Background top={-200} left={-200} />
-        <h2 className="text-3xl font-bold mb-4">Welcome, {userDetails.name}!</h2>
-        <p className="text-lg">Explore the latest blogs and updates curated just for you.</p>
+      <section className=" py-8 px-6 text-center z-50">
+        <h2 className="text-3xl font-bold mb-4 z-50">Welcome, {userDetails.name}!</h2>
+        <p className="text-lg z-50">Explore the latest blogs and updates curated just for you.</p>
       </section>
 
       {/* Search and Blog Section */}
-      <main className="container mx-auto flex-grow py-8 px-4">
+      <main className="container mx-auto flex-grow py-8 px-4 z-50">
         {/* Search Bar */}
         <div className="flex justify-center mb-6">
           <Input
@@ -102,7 +80,7 @@ const HomePage = ({ setIsLoggedIn}) => {
               {filteredBlogs.map((blog) => (
                 <div
                   key={blog.id}
-                  className="border rounded-lg shadow-md p-4 hover:shadow-lg transition"
+                  className="border rounded-lg shadow-md p-4 bg-[#060607] hover:shadow-lg transition"
                 >
                   <h4 className="text-lg font-bold mb-2">{blog.title}</h4>
                   <p className="text-gray-600 mb-2">{blog.description}</p>
@@ -131,7 +109,7 @@ const HomePage = ({ setIsLoggedIn}) => {
       {/* Footer Section */}
       <Footer/>
     </div>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default UserPage

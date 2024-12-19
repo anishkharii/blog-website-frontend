@@ -20,7 +20,7 @@ const Input = ({ label, forgotRequired, type, className, ...props }) => {
       <input
         {...props}
         type={type}
-        className={`${className} p-2 rounded-md  bg-transparent border border-white/20  `}
+        className={`${className} p-2 rounded-md  bg-[#060607] border border-white/20  `}
       />
     </div>
   );

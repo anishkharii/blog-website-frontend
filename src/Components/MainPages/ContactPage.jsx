@@ -26,10 +26,12 @@ const ContactPage = () => {
   return (
     <div className="text-white flex flex-col items-center justify-center h-[80vh]">
     <Background top={-200} left={-100}/>
+    <div className="flex flex-col z-50 items-center justify-center">
+
       <h1 className="text-3xl font-bold">Contact Us</h1>
       <p className="text-lg mb-5"> For any queries, please contact us at:</p>
 
-      <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center px-3 py-5 border border-white/20 bg-[#09090b] rounded-md">
+      <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center px-3 py-5 border border-white/20 bg-[#060607] rounded-md">
        
           <Input
             type="text"
@@ -66,7 +68,8 @@ const ContactPage = () => {
         <Button type="submit">Submit</Button>
       </form>
 
-      <p className="text-sm text-white/5 mt-5 "> Please maintain a respectful tone in your communication.</p>
+      <p className="text-sm text-white/20 mt-5 "> Please maintain a respectful tone in your communication.</p>
+    </div>
     </div>
   );
 };

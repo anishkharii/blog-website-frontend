@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import Background from "../LoginPage/Background";
-const SignupPage = ({ onTriggerNotification}) => {
+
+
+const SignupPage = ({ onTriggerNotification, onAuthOtp}) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fname: "",
@@ -36,12 +38,14 @@ const SignupPage = ({ onTriggerNotification}) => {
       });
   
       const data = await res.json();
+      console.log(data);
       onTriggerNotification({
         type: data.status ? "success" : "error",
         message: data.msg,
         duration: 5000,
       });
       if (data.status === true) {
+        onAuthOtp(true);
         navigate(`/otp-verification/${data.data.id}`);
       }
     }catch(err){
@@ -56,8 +60,8 @@ const SignupPage = ({ onTriggerNotification}) => {
   }
   return (
     <div className="text-white text-center  flex flex-col md:items-center md:justify-center h-[120vh] md:h-[90vh] w-10/12 md:w-auto mt-10 md:mt-auto  mx-auto">
-      <Background top={0} left={250} />
-      <div className=" border border-white/20 bg-[#09090b]  rounded-lg p-5">
+      <Background />
+      <div className="z-50 border border-white/20 bg-[#060607]  rounded-lg p-5">
      
 
         <div className=" text-left">
@@ -134,7 +138,7 @@ const SignupPage = ({ onTriggerNotification}) => {
         </p>
       </div>
 
-      <p className="text-sm pt-5 px-8">
+      <p className="text-sm pt-5 px-8 z-50">
         By clicking continue, you agree to our{" "}
         <a
           href="#/"

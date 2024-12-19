@@ -26,7 +26,7 @@ const useNotification = () => {
   );
 
   const NotificationComponent = (
-    <div className=" fixed bottom-5 left-1/2 transform -translate-x-1/2 w-10/12 max-w-md flex flex-col gap-2 transition-all">
+    <div className=" fixed bottom-5 z-[1000] left-1/2 transform -translate-x-1/2 w-10/12 max-w-md flex flex-col gap-2 transition-all">
       {notifications.map((notif) => (
         <Notification
           key={notif.id}

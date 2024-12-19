@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import Background from "./Background";
 
-const LoginPage = ({ onTriggerNotification }) => {
+const LoginPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated, setIsAuthenticated }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  isAuthenticated && <Navigate to="/" />;
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -28,6 +28,7 @@ const LoginPage = ({ onTriggerNotification }) => {
             message: data.msg,
             duration: 3500,
           });
+          onAuthOtp(true);
           navigate(`/otp-verification/${data.id}`);
           return;
         }
@@ -38,15 +39,16 @@ const LoginPage = ({ onTriggerNotification }) => {
         });
         return;
       }
-      const userToken = data.token;
-      const userId = data.id;
-      localStorage.setItem("userToken", userToken);
-      localStorage.setItem("userId", userId);
+
+      const {token, id} = data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("id", id);
       onTriggerNotification({
         type: "success",
         message: data.msg,
         duration: 3500,
       })
+      setIsAuthenticated(true);
       navigate("/");
     } catch (err) {
       onTriggerNotification({
@@ -59,10 +61,10 @@ const LoginPage = ({ onTriggerNotification }) => {
   }
 
   return (
-    <div className="text-white text-center  flex flex-col items-center justify-center h-[80vh] max-w-md mx-auto">
+    <div className="  text-white text-center flex flex-col items-center justify-center h-[80vh] max-w-md mx-auto overflow-x-hidden">
       <Background top={-200} left={-200} />
-      <div className=" border border-white/20 bg-[#09090b] rounded-lg p-5">
-        <div className=" text-left">
+      <div className="border border-white/20 bg-[#060607] rounded-lg p-5 md:p-10 z-50 shadow-2xl shadow-black">
+        <div className="text-left">
           <h2 className="text-2xl font-bold pb-2">Login</h2>
           <p className="text-sm text-white/60">
             Enter your email below to login to your account
@@ -95,25 +97,25 @@ const LoginPage = ({ onTriggerNotification }) => {
             Don't have an account?{" "}
             <a
               href="/signup"
-              className=" underline underline-offset-2 hover:text-white/50  transition-all"
+              className="underline underline-offset-2 hover:text-white/50 transition-all"
             >
               Sign up
             </a>
           </p>
         </form>
       </div>
-      <p className="text-sm pt-5 px-8">
+      <p className="text-sm pt-5 px-8 z-50">
         By clicking continue, you agree to our{" "}
         <a
           href="#/"
-          className=" underline underline-offset-2 hover:text-white/50  transition-all"
+          className="underline underline-offset-2 hover:text-white/50 transition-all"
         >
           Terms and Conditions
         </a>{" "}
         and{" "}
         <a
           href="#/"
-          className=" underline underline-offset-2 hover:text-white/50  transition-all"
+          className="underline underline-offset-2 hover:text-white/50 transition-all"
         >
           Privacy Policy
         </a>

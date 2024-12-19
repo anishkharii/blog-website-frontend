@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SignOut = ({ setIsLoggedIn, onTriggerNotification }) => {
+const SignOut = ({ setIsAuthenticated, onTriggerNotification }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
     // Clear user token and related data from localStorage
-    localStorage.removeItem("userToken");
-    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("id");
 
     // Update logged-in state
-    setIsLoggedIn(false);
+    setIsAuthenticated(false);
 
     // Trigger a notification
     onTriggerNotification({
@@ -21,7 +21,7 @@ const SignOut = ({ setIsLoggedIn, onTriggerNotification }) => {
 
     // Redirect to the home page
     navigate("/");
-  }, [setIsLoggedIn, onTriggerNotification, navigate]);
+  }, [setIsAuthenticated, onTriggerNotification, navigate]);
 
   return null; // No UI required for this component
 };

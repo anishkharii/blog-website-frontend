@@ -47,7 +47,7 @@ const OtpVerificationPage = ({ onTriggerNotification }) => {
   return (
     <div className="text-white text-center  flex flex-col items-center justify-center h-[80vh] max-w-md mx-auto">
       <Background top={-100} left={-100} />
-      <div className=" border border-white/20 bg-[#09090b] rounded-lg p-10 flex flex-col ">
+      <div className=" border border-white/20 bg-[#060607] rounded-lg p-10 flex flex-col z-50 ">
         <h1 className="text-3xl font-bold">OTP Verification</h1>
         <p className=" mb-5">
           OTP has been sent to your email. Please verify it.

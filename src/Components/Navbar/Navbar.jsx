@@ -1,42 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import Button from "../UI/Button";
 import Avatar from "./Avatar";
 import SmallDeviceMenu from "./SmallDeviceMenu";
 import LogoAndLinks from "./LogoAndLinks";
+import '../../index.css';
 
-const Navbar = ({isLoggedIn}) => {
+const Navbar = ({ isAuthenticated, userDetails }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
   const [menuItems, setMenuItems] = useState([
-    { href: "/  ", name: "Home", current: true },
+    { href: "/", name: "Home", current: true },
     { href: "/blogs", name: "Blogs", current: false },
     { href: "/about", name: "About Us", current: false },
     { href: "/contact", name: "Contact", current: false },
   ]);
-  function handleItemClick(index) {
-    const updatedItems = menuItems.map((item, i) => ({
+
+  const handleItemClick = (index) => {
+    setMenuItems(menuItems.map((item, i) => ({
       ...item,
       current: i === index,
-    }));
-    setMenuItems(updatedItems);
-  }
+    })));
+    setMenuOpen(false);
+  };
+
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
-      <nav className=" flex items-center justify-between h-14 text-white top-0 z-50 sticky px-4 border-b border-white/20 shadow-white bg-[#09090b]/90 backdrop-blur-[2px] ">
-      
+      <nav className="flex items-center justify-between h-14 text-white top-0 z-[1000] sticky px-4 border-b border-white/20 shadow-white bg-primary bg-opacity-30 backdrop-blur-lg">
         <LogoAndLinks
           menuItems={menuItems}
           menuOpen={menuOpen}
           setMenuOpen={setMenuOpen}
           onItemClick={handleItemClick}
         />
-
-        {isLoggedIn ? (
-          <Avatar />
+        {isAuthenticated ? (
+          <Avatar name={userDetails.name} />
         ) : (
-          <div className=" md:flex gap-5">
-            <Button varient="outline" className='hidden md:block'>
+          <div className="md:flex gap-5">
+            <Button variant="outline" className="hidden md:block">
               <Link to="/logIn">Login</Link>
             </Button>
             <Button>
@@ -45,13 +60,14 @@ const Navbar = ({isLoggedIn}) => {
           </div>
         )}
       </nav>
-
       {menuOpen && (
-        <SmallDeviceMenu
-          menuItems={menuItems}
-          onItemClick={handleItemClick}
-          isLoggedIn={isLoggedIn}
-        />
+        <div ref={menuRef}>
+          <SmallDeviceMenu
+            menuItems={menuItems}
+            onItemClick={handleItemClick}
+            isAuthenticated={isAuthenticated}
+          />
+        </div>
       )}
     </>
   );

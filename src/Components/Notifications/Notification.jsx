@@ -19,7 +19,7 @@ const Notification = ({ type = "info", message, onClose = () => {} }) => {
   
   return (
     <>
-      <div className={`text-white flex items-center justify-between p-4 gap-4 rounded-md z-50  notification-pop-up `} style={{background:color}}>
+      <div className={`text-white flex items-center justify-between p-4 gap-4 rounded-md z-[1000]  notification-pop-up `} style={{background:color}}>
         {/*Icons*/}
         {icons.map((item, i) => item.type===type && <span key={i}>{item.icon}</span>)}
 
