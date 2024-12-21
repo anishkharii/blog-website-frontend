@@ -4,11 +4,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import Button from "../UI/Button";
 import Background from "../LoginPage/Background";
 
-const OtpVerificationPage = ({ onTriggerNotification }) => {
+const OtpVerificationPage = ({ onTriggerNotification, onAuthForgot}) => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState("");
 
   const id = useParams().id;
+  const type = useParams().type;
   async function handleSubmit(e) {
     try {
       e.preventDefault();
@@ -17,7 +18,7 @@ const OtpVerificationPage = ({ onTriggerNotification }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ otp }),
+        body: JSON.stringify({ otp, type }),
       });
       const data = await res.json();
       console.log(data)
@@ -29,12 +30,19 @@ const OtpVerificationPage = ({ onTriggerNotification }) => {
         });
         return;
       }
+     
       onTriggerNotification({
         type: "success",
         message: data.msg,
         duration: 5000,
       });
-      navigate(`/login`);
+      if(type==='forgot'){
+        onAuthForgot(true);
+        navigate(`/forgot-password/${id}`);
+      }
+      else{
+        navigate('/login');
+      }
     } catch (err) {
       onTriggerNotification({
         type: "error",

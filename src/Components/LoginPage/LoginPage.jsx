@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import Background from "./Background";
+import Loading from "../Loading";
 
 const LoginPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated, setIsAuthenticated }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  isAuthenticated && <Navigate to="/" />;
+  const [isLoading, setIsLoading] = useState(false);
+  isAuthenticated && navigate('/');
   async function handleSubmit(e) {
     e.preventDefault();
     try {
+      setIsLoading(true);
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/login`, {
         method: "POST",
         headers: {
@@ -58,11 +61,15 @@ const LoginPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated, setIsAut
       });
       console.log(err);
     }
+    finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <div className="  text-white text-center flex flex-col items-center justify-center h-[80vh] max-w-md mx-auto overflow-x-hidden">
       <Background top={-200} left={-200} />
+      {isLoading && <Loading/>}
       <div className="border border-white/20 bg-[#060607] rounded-lg p-5 md:p-10 z-50 shadow-2xl shadow-black">
         <div className="text-left">
           <h2 className="text-2xl font-bold pb-2">Login</h2>

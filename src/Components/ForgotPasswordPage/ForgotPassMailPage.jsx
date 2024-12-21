@@ -2,12 +2,36 @@ import React, { useState } from 'react'
 import Background from '../LoginPage/Background'
 import Button from '../UI/Button'
 import Input from '../UI/Input'
+import { useNavigate } from 'react-router-dom'
 
-const ForgotPassMailPage = () => {
+const ForgotPassMailPage = ({onAuthOtp, onTriggerNotification}) => {
+    const navigate = useNavigate();
     const [email, setEmail] =  useState('');
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        console.log(email);
+        try{
+
+          const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/forgot-password/${email}`);
+          const data = await res.json();
+          console.log(data);
+          if(data.status){
+            onAuthOtp(true);
+            onTriggerNotification({
+              type: "success",
+              message: data.msg,
+              duration: 5000,
+            });
+            navigate(`/otp-verification/${data.id}/forgot`);
+          }
+        }
+        catch(err){
+            onTriggerNotification({
+                type: "error",
+                message: "Something went wrong. Please try again.",
+                duration: 5000,
+            });
+            console.log(err);
+        }
     }
   return (
     <div className="text-white text-center  flex flex-col items-center justify-center h-[80vh] max-w-md mx-auto">

@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import Background from "../LoginPage/Background";
-
-
-const SignupPage = ({ onTriggerNotification, onAuthOtp}) => {
+import Loading from "../Loading";
+const SignupPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated}) => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -15,6 +15,7 @@ const SignupPage = ({ onTriggerNotification, onAuthOtp}) => {
     password: "",
     role: "user",
   });
+  isAuthenticated && navigate('/');
 
   function handleChange(e) {
     let name = e.target.name;
@@ -29,6 +30,7 @@ const SignupPage = ({ onTriggerNotification, onAuthOtp}) => {
   async function handleSubmit(e) {
     e.preventDefault();
     try{
+      setIsLoading(true);
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/add-user`, {
         method: "POST",
         headers: {
@@ -56,11 +58,15 @@ const SignupPage = ({ onTriggerNotification, onAuthOtp}) => {
       });
       console.log(err);
     }
+    finally{
+      setIsLoading(false);
+    }
     
   }
   return (
     <div className="text-white text-center  flex flex-col md:items-center md:justify-center h-[120vh] md:h-[90vh] w-10/12 md:w-auto mt-10 md:mt-auto  mx-auto">
       <Background />
+      {isLoading && <Loading/>}
       <div className="z-50 border border-white/20 bg-[#060607]  rounded-lg p-5">
      
 
@@ -156,7 +162,7 @@ const SignupPage = ({ onTriggerNotification, onAuthOtp}) => {
         .
       </p>
 
-      <div className="flex gap-5 flex-col items-center justify-center text-white/10 md:flex-row text-[10px] mt-3">
+      <div className="flex gap-5 flex-col items-center justify-center text-white/20 md:flex-row text-[10px] mt-3 z-50">
         <label
           htmlFor="title"
         >
@@ -168,8 +174,8 @@ const SignupPage = ({ onTriggerNotification, onAuthOtp}) => {
           className=" border border-white/10 bg-[#09090b] rounded-lg p-2  md:w-auto"
         >
           <option value="user" className="text-white">User</option>
-          <option value="Author" className="text-white">Author</option>
-          <option value="Admin"  disabled>Admin</option>
+          <option value="author" className="text-white">Author</option>
+          <option value="admin"  disabled>Admin</option>
         </select>
       </div>
     </div>

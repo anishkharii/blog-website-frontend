@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Input = ({ label, forgotRequired, type, className, ...props }) => {
   return (
@@ -6,12 +7,12 @@ const Input = ({ label, forgotRequired, type, className, ...props }) => {
       {type === "password" && forgotRequired === true ? (
         <div className="flex justify-between text-sm pb-1">
           {label && <label htmlFor={props.label}>{label}</label>}
-          <a
-            href="/forgot-password"
+          <Link
+            to="/forgot-password"
             className="text-white/80 hover:text-white hover:underline transition-all"
           >
             Forgot Your Password?
-          </a>
+          </Link>
         </div>
       ) : (
         <>{label && <label htmlFor={label}>{label}</label>}</>

@@ -1,26 +1,35 @@
 import React, { useEffect, useState } from "react";
+import Loading from "../Loading";
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
-
+  const  [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/${localStorage.getItem("id")}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        }
-      });
-      const data = await res.json();
-      console.log(data.users);
-      setUsers(data.users);
+      try{
+        setIsLoading(true);
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/${localStorage.getItem("id")}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
+        });
+        const data = await res.json();
+        setUsers(data.users);
+      }catch(err){
+        console.error("Error fetching users:", err);
+      }
+      finally{
+        setIsLoading(false);
+      }
     };
     fetchUsers();
   }, []);
 
   return (
     <div className="flex flex-col items-center justify-center text-white">
+      {isLoading && <Loading/>}
       <h1 className="text-3xl font-bold">Admin Page</h1>
       <p className="text-lg mb-5">This is the admin page.</p>
       <div className="bg-[#333] p-4 rounded-md">

@@ -67,7 +67,7 @@ const OtpComponent = ({ length, onOtp, className }) => {
         <Input
           key={index}
           ref={(el) => (inputsRef.current[index] = el)} // Store refs
-          type="text"
+          type="number"
           maxLength="1"
           className='w-12 h-12 text-center'
           onChange={(e) => handleInputChange(e, index)}

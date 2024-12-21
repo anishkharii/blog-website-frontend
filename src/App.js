@@ -21,6 +21,8 @@ import {
 } from "./Components/AllComponents";
 import  useNotification  from './Hooks/use-notification';
 import NotFound from "./Components/NotFound";
+import ForgotPassMailPage from "./Components/ForgotPasswordPage/ForgotPassMailPage";
+import ForgotPassPassPage from "./Components/ForgotPasswordPage/ForgotPassPassPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); 
@@ -28,7 +30,9 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const { NotificationComponent, TriggerNotification } = useNotification();
   const [authOtp, setAuthOtp] = useState(false);
+  const [authForgot, setAuthForgot] = useState(false);
   const [userDetails, setUserDetails] = useState({ name: "", email: "" });
+
   useEffect(() => {
     const checkAuthentication = async () => {
       const id = localStorage.getItem("id");
@@ -45,7 +49,7 @@ function App() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           }
-        });
+        }); 
         const data = await res.json();
         if(!data.status){
           setIsAuthenticated(false);
@@ -57,7 +61,6 @@ function App() {
           email:data.user.email
         })
         setIsAuthenticated(true);
-        console.log(data)
         setIsAdmin(data.user.role === "admin");
       } catch (err) {
         console.error("Authentication check failed:", err);
@@ -77,6 +80,10 @@ function App() {
     return isAuthenticated ? <Outlet /> : <Navigate to="/logIn" />;
   };
 
+  const PrivateForgotRoute = ({authForgot, ...props})=>{
+    return authForgot? <Outlet/> :<Navigate to='/logIn'/>
+  }
+
   if (isLoading) {
     return <div className="flex justify-center items-center h-screen text-white">Loading...</div>; 
   }
@@ -95,6 +102,7 @@ function App() {
           element={
             <LoginPage
               onTriggerNotification={TriggerNotification}
+              onAuthForgot={setAuthForgot}
               onAuthOtp={setAuthOtp}
               isAuthenticated={isAuthenticated}
               setIsAuthenticated={setIsAuthenticated}
@@ -106,6 +114,7 @@ function App() {
           element={
             <SignupPage
               onTriggerNotification={TriggerNotification}
+              isAuthenticated={isAuthenticated}
               onAuthOtp={setAuthOtp}
             />
           }
@@ -115,12 +124,31 @@ function App() {
           element={<PrivateOtpRoute authOtp={authOtp} />}
         >
           <Route
-            path="/otp-verification/:id"
+            path="/otp-verification/:id/:type"
             element={
               <OtpVerificationPage
+                onAuthForgot={setAuthForgot}
                 onTriggerNotification={TriggerNotification}
               />
             }
+          />
+        </Route>
+        <Route
+            path="/forgot-password"
+            element={
+              <ForgotPassMailPage
+                onAuthOtp={setAuthOtp}
+                onTriggerNotification={TriggerNotification}
+              />
+            }
+          />
+        <Route
+          path="/forgot-password/:id"
+          element={<PrivateForgotRoute authForgot={authForgot}  />}
+        >
+        <Route
+          path="/forgot-password/:id"
+          element={<ForgotPassPassPage onTriggerNotification={TriggerNotification}/>}
           />
         </Route>
         <Route
@@ -155,7 +183,7 @@ function App() {
             }
           />
         </Route>
-        <Route path="*" element={<NotFound/>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
