@@ -27,7 +27,7 @@ import ForgotPassPassPage from "./Components/ForgotPasswordPage/ForgotPassPassPa
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); 
   const [isLoading, setIsLoading] = useState(true); 
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [role, setRole] = useState("user");
   const { NotificationComponent, TriggerNotification } = useNotification();
   const [authOtp, setAuthOtp] = useState(false);
   const [authForgot, setAuthForgot] = useState(false);
@@ -61,7 +61,8 @@ function App() {
           email:data.user.email
         })
         setIsAuthenticated(true);
-        setIsAdmin(data.user.role === "admin");
+        setRole(data.user.role);
+        console.log(data.user.role)
       } catch (err) {
         console.error("Authentication check failed:", err);
         setIsAuthenticated(false);
@@ -178,7 +179,7 @@ function App() {
               <HomePage
                 setIsAuthenticated={setIsAuthenticated}
                 userDetails={userDetails}
-                isAdmin={isAdmin}
+                role={role}
               />
             }
           />

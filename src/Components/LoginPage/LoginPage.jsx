@@ -32,7 +32,7 @@ const LoginPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated, setIsAut
             duration: 3500,
           });
           onAuthOtp(true);
-          navigate(`/otp-verification/${data.id}`);
+          navigate(`/otp-verification/${data.id}/signup`);
           return;
         }
         onTriggerNotification({

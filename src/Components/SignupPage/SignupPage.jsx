@@ -48,7 +48,7 @@ const SignupPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated}) => {
       });
       if (data.status === true) {
         onAuthOtp(true);
-        navigate(`/otp-verification/${data.data.id}`);
+        navigate(`/otp-verification/${data.data.id}/signup`);
       }
     }catch(err){
       onTriggerNotification({
