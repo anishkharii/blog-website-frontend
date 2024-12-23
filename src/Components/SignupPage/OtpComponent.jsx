@@ -59,17 +59,18 @@ const OtpComponent = ({ length, onOtp, className }) => {
   };
 
   return (
-    <div
+    <div  
       className="flex gap-2 p-2 mx-auto"
       onPaste={handlePaste} // Handle paste for quick entry
     >
       {Array.from({ length: length }, (_, index) => (
         <Input
           key={index}
-          ref={(el) => (inputsRef.current[index] = el)} // Store refs
-          type="number"
+          ref={(el) => (inputsRef.current[index] = el)} 
+          type="text" 
+          inputMode="numeric"
           maxLength="1"
-          className='w-12 h-12 text-center'
+          className='w-12 h-12 text-center '
           onChange={(e) => handleInputChange(e, index)}
           onKeyDown={(e) => handleKeyDown(e, index)}
         />

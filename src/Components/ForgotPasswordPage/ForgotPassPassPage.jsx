@@ -1,63 +1,110 @@
-import React, { useState } from 'react'
-import Background from '../LoginPage/Background'
-import Button from '../UI/Button'
-import Input from '../UI/Input'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, { useState } from "react";
+import Background from "../LoginPage/Background";
+import Button from "../UI/Button";
+import Input from "../UI/Input";
+import { useNavigate, useParams } from "react-router-dom";
 
-const ForgotPassPassPage = ({onAuthOtp, onTriggerNotification}) => {
-    const navigate = useNavigate();
-    const [password, setPassword] =  useState('');
-    const id = useParams().id;
-    const handleSubmit = async(e) => {
-        e.preventDefault();
-        try{
-            const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/forgot-password/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ password }),
-            });
-    
-            const data = await res.json();
-            console.log(data);
-            if(data.status){
-              onTriggerNotification({
-                type: "success",
-                message: data.msg,
-                duration: 5000,
-              });
-              navigate(`/login`);
-            }
-        }
-        catch(err){
-            onTriggerNotification({
-                type: "error",
-                message: "Something went wrong. Please try again.",
-                duration: 5000,
-            });
-            console.log(err);
-        }
-        
+const ForgotPassPassPage = ({ onAuthOtp, onTriggerNotification }) => {
+  const navigate = useNavigate();
+  const [password1, setPassword1] = useState("");
+  const [password2, setPassword2] = useState("");
+  const id = useParams().id;
+
+  const handleError = (message) => {
+    onTriggerNotification({
+      type: "error",
+      message,
+      duration: 3500,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!password1 || !password2) {
+      handleError("Please fill all the fields.");
+      return;
     }
+    if (password1 !== password2) {
+      handleError("Passwords do not match.");
+      return;
+    }
+    if (password1.length < 8) {
+      handleError("Password must be at least 8 characters long.");
+      return;
+    }
+    if (!/[A-Z]/.test(password1)) {
+      handleError("Password must contain at least one uppercase letter.");
+      return;
+    }
+    if (!/[a-z]/.test(password1)) {
+      handleError("Password must contain at least one lowercase letter.");
+      return;
+    }
+    if (!/\d/.test(password1)) {
+      handleError("Password must contain at least one number.");
+      return;
+    }
+    if (!/[@$!%*?&]/.test(password1)) {
+      handleError("Password must contain at least one special character.");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/forgot-password/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password:password1 }),
+        }
+      );
+
+      const data = await res.json();
+      if (data.status) {
+        onTriggerNotification({
+          type: "success",
+          message: data.msg,
+          duration: 3500,
+        });
+        navigate(`/login`);
+      }
+    } catch (err) {
+      handleError("Something went wrong. Please try again.");
+      console.log(err);
+    }
+  };
   return (
     <div className="text-white text-center  flex flex-col items-center justify-center h-[80vh] max-w-md mx-auto">
       <Background top={-100} left={-100} />
       <div className=" border border-white/20 bg-[#060607] rounded-lg p-10 flex flex-col z-50 ">
         <h1 className="text-3xl font-bold">Forgot Password</h1>
-        <p className="text-lg mb-5">Enter New Password</p>
+        <p className="text-lg mb-5">Make strong Password</p>
         <Input
           type="password"
           placeholder="Password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          name="password1"
+          label="Password"
+          eyeRequired={false}
+          value={password1}
+          onChange={(e) => setPassword1(e.target.value)}
           required
         />
+        <Input
+          type="password"
+          placeholder="Password"
+          name="password2"
+          label="Password Again"
+          value={password2}
+          onChange={(e) => setPassword2(e.target.value)}
+          required
+        />
+        {}
         <Button onClick={handleSubmit}>Verify</Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default ForgotPassPassPage;
