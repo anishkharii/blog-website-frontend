@@ -4,10 +4,10 @@ import Button from "../UI/Button";
 import Input from "../UI/Input";
 import Background from "../LoginPage/Background";
 import Loading from "../Loading";
-import { useAuth } from "../../Hooks/useAuth";
+import { useNotification } from "../../Hooks/useNotification";
 const SignupPage = ({ onAuthOtp, isAuthenticated}) => {
   const navigate = useNavigate();
-  const {TriggerNotification} = useAuth();
+  const {TriggerNotification} = useNotification();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     fname: "",

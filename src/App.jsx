@@ -23,14 +23,11 @@ import NotFound from "./Components/NotFound";
 import ForgotPassMailPage from "./Components/ForgotPasswordPage/ForgotPassMailPage";
 import ForgotPassPassPage from "./Components/ForgotPasswordPage/ForgotPassPassPage";
 import { AuthProvider, useAuth } from "./Hooks/useAuth";
-import { useNotification } from "./Hooks/useNotification";
-import Button from "./Components/UI/Button";
 
 function AppContent() {
   const [authOtp, setAuthOtp] = useState(false);
   const [authForgot, setAuthForgot] = useState(false);
   const { isAuthenticated } = useAuth();
-  const { TriggerNotification } = useNotification();
   
   const PrivateOtpRoute = () => {
     return authOtp ? <Outlet /> : <Navigate to="/signUp" />;

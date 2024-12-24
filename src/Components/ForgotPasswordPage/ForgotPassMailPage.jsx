@@ -3,10 +3,11 @@ import Background from '../LoginPage/Background'
 import Button from '../UI/Button'
 import Input from '../UI/Input'
 import { useNavigate } from 'react-router-dom'
+import { useNotification } from '../../Hooks/useNotification'
 
 const ForgotPassMailPage = ({onAuthOtp}) => {
     const navigate = useNavigate();
-    const {TriggerNotification} = useAuth();
+    const {TriggerNotification} = useNotification();
     const [email, setEmail] =  useState('');
     const handleSubmit = async(e) => {
         e.preventDefault();

@@ -3,10 +3,11 @@ import OtpComponent from "./OtpComponent";
 import { useParams, useNavigate } from "react-router-dom";
 import Button from "../UI/Button";
 import Background from "../LoginPage/Background";
+import { useNotification } from "../../Hooks/useNotification";
 
 const OtpVerificationPage = ({  onAuthForgot}) => {
   const navigate = useNavigate();
-  const {TriggerNotification} = useAuth();
+  const {TriggerNotification} = useNotification();
   const [otp, setOtp] = useState("");
 
   const id = useParams().id;

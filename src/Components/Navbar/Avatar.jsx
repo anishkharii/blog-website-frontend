@@ -31,7 +31,7 @@ const Avatar = () => {
         className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center cursor-pointer"
         onClick={() => setUserMenuOpen(!userMenuOpen)}
       >
-        {name.charAt(0).toUpperCase()}
+        {userDetails.name.charAt(0).toUpperCase()}
       </div>
       {userMenuOpen && (
         <ul className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-10">
