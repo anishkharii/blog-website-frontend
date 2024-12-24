@@ -1,8 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useActionData } from "react-router-dom";
 import Button from "../UI/Button";
+import { useAuth } from "../../Hooks/useAuth";
 
-const SmallDeviceMenu = ({ menuItems, onItemClick, isAuthenticated }) => {
+const SmallDeviceMenu = ({ menuItems, onItemClick }) => {
+  const {isAuthenticated} = useAuth();
   return (
     <ul className="bg-[#060607] z-[1000] absolute text-left items-center top-14 left-0 w-full flex flex-col  border-b border-white/20 transition-all md:hidden py-1 shadow-lg">
       {menuItems.map((item, i) => (

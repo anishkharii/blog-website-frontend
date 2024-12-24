@@ -1,8 +1,12 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../Hooks/useAuth";
+import { useNotification } from "../../Hooks/useNotification";
 
-const SignOut = ({ setIsAuthenticated, onTriggerNotification }) => {
+const SignOut = () => {
   const navigate = useNavigate();
+  const {setIsAuthenticated} = useAuth();
+  const {TriggerNotification} = useNotification();
 
   useEffect(() => {
     // Clear user token and related data from localStorage
@@ -13,7 +17,7 @@ const SignOut = ({ setIsAuthenticated, onTriggerNotification }) => {
     setIsAuthenticated(false);
 
     // Trigger a notification
-    onTriggerNotification({
+    TriggerNotification({
       type: "info",
       message: "You have successfully logged out.",
       duration: 3000,
@@ -21,7 +25,7 @@ const SignOut = ({ setIsAuthenticated, onTriggerNotification }) => {
 
     // Redirect to the home page
     navigate("/");
-  }, [setIsAuthenticated, onTriggerNotification, navigate]);
+  }, [setIsAuthenticated, TriggerNotification, navigate]);
 
   return null; // No UI required for this component
 };

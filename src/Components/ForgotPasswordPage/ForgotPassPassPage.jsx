@@ -4,14 +4,15 @@ import Button from "../UI/Button";
 import Input from "../UI/Input";
 import { useNavigate, useParams } from "react-router-dom";
 
-const ForgotPassPassPage = ({ onAuthOtp, onTriggerNotification }) => {
+const ForgotPassPassPage = ({ onAuthOtp }) => {
   const navigate = useNavigate();
+  const {TriggerNotification} = useAuth();
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
   const id = useParams().id;
 
   const handleError = (message) => {
-    onTriggerNotification({
+    TriggerNotification({
       type: "error",
       message,
       duration: 3500,
@@ -51,7 +52,7 @@ const ForgotPassPassPage = ({ onAuthOtp, onTriggerNotification }) => {
 
     try {
       const res = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/forgot-password/${id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/forgot-password/${id}`,
         {
           method: "PUT",
           headers: {
@@ -63,7 +64,7 @@ const ForgotPassPassPage = ({ onAuthOtp, onTriggerNotification }) => {
 
       const data = await res.json();
       if (data.status) {
-        onTriggerNotification({
+        TriggerNotification({
           type: "success",
           message: data.msg,
           duration: 3500,

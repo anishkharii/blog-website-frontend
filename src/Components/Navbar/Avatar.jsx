@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../Hooks/useAuth";
 
-const Avatar = ({ name }) => {
+const Avatar = () => {
+  const {userDetails} = useAuth();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
 
   const userMenuItems = [
-    { href: "/profile", name: "Your Profile", current: false },
-    { href: "/sign-out", name: "Sign Out", current: false },
+    { href: "/profile", name: "Your Profile" },
+    { href: "/sign-out", name: "Sign Out" },
   ];
 
   useEffect(() => {

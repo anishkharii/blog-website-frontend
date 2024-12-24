@@ -26,7 +26,7 @@ const Notification = ({ type = "info", message, onClose = () => {} }) => {
         {/*Message*/}
         <p className="text-md font-semibold ">{message}</p>
         {/*close button*/}
-        <X onClick={onClose} className="close-btn" />
+        <X onClick={onClose} className=" cursor-pointer " />
         {/* <div className="notification-bottom-loader"></div> */}
       </div>
       

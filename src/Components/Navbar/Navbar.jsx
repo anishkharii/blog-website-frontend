@@ -5,8 +5,10 @@ import Avatar from "./Avatar";
 import SmallDeviceMenu from "./SmallDeviceMenu";
 import LogoAndLinks from "./LogoAndLinks";
 import '../../index.css';
+import { useAuth } from "../../Hooks/useAuth";
 
-const Navbar = ({ isAuthenticated, userDetails }) => {
+const Navbar = () => {
+  const {isAuthenticated, userDetails} = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -65,7 +67,6 @@ const Navbar = ({ isAuthenticated, userDetails }) => {
           <SmallDeviceMenu
             menuItems={menuItems}
             onItemClick={handleItemClick}
-            isAuthenticated={isAuthenticated}
           />
         </div>
       )}

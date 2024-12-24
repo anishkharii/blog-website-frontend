@@ -4,8 +4,10 @@ import Button from "../UI/Button";
 import Input from "../UI/Input";
 import Background from "../LoginPage/Background";
 import Loading from "../Loading";
-const SignupPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated}) => {
+import { useAuth } from "../../Hooks/useAuth";
+const SignupPage = ({ onAuthOtp, isAuthenticated}) => {
   const navigate = useNavigate();
+  const {TriggerNotification} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     fname: "",
@@ -31,7 +33,7 @@ const SignupPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated}) => {
     e.preventDefault();
     try{
       setIsLoading(true);
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/add-user`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/add-user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,7 +43,7 @@ const SignupPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated}) => {
   
       const data = await res.json();
       console.log(data);
-      onTriggerNotification({
+      TriggerNotification({
         type: data.status ? "success" : "error",
         message: data.msg,
         duration: 5000,
@@ -51,7 +53,7 @@ const SignupPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated}) => {
         navigate(`/otp-verification/${data.data.id}/signup`);
       }
     }catch(err){
-      onTriggerNotification({
+      TriggerNotification({
         type: "error",
         message: err.message,
         duration: 5000,

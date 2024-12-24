@@ -4,8 +4,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import Button from "../UI/Button";
 import Background from "../LoginPage/Background";
 
-const OtpVerificationPage = ({ onTriggerNotification, onAuthForgot}) => {
+const OtpVerificationPage = ({  onAuthForgot}) => {
   const navigate = useNavigate();
+  const {TriggerNotification} = useAuth();
   const [otp, setOtp] = useState("");
 
   const id = useParams().id;
@@ -13,7 +14,7 @@ const OtpVerificationPage = ({ onTriggerNotification, onAuthForgot}) => {
   async function handleSubmit(e) {
     try {
       e.preventDefault();
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/verify-user/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/verify-user/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,7 +24,7 @@ const OtpVerificationPage = ({ onTriggerNotification, onAuthForgot}) => {
       const data = await res.json();
       console.log(data)
       if (!data.status) {
-        onTriggerNotification({
+        TriggerNotification({
           type: "error",
           message: data.msg,
           duration: 2500,
@@ -31,7 +32,7 @@ const OtpVerificationPage = ({ onTriggerNotification, onAuthForgot}) => {
         return;
       }
      
-      onTriggerNotification({
+      TriggerNotification({
         type: "success",
         message: data.msg,
         duration: 5000,
@@ -44,7 +45,7 @@ const OtpVerificationPage = ({ onTriggerNotification, onAuthForgot}) => {
         navigate('/login');
       }
     } catch (err) {
-      onTriggerNotification({
+      TriggerNotification({
         type: "error",
         message: "Something went wrong. Please try again.",
         duration: 5000,

@@ -4,19 +4,20 @@ import Button from '../UI/Button'
 import Input from '../UI/Input'
 import { useNavigate } from 'react-router-dom'
 
-const ForgotPassMailPage = ({onAuthOtp, onTriggerNotification}) => {
+const ForgotPassMailPage = ({onAuthOtp}) => {
     const navigate = useNavigate();
+    const {TriggerNotification} = useAuth();
     const [email, setEmail] =  useState('');
     const handleSubmit = async(e) => {
         e.preventDefault();
         try{
 
-          const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/forgot-password/${email}`);
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/forgot-password/${email}`);
           const data = await res.json();
           console.log(data);
           if(data.status){
             onAuthOtp(true);
-            onTriggerNotification({
+            TriggerNotification({
               type: "success",
               message: data.msg,
               duration: 5000,
@@ -25,7 +26,7 @@ const ForgotPassMailPage = ({onAuthOtp, onTriggerNotification}) => {
           }
         }
         catch(err){
-            onTriggerNotification({
+            TriggerNotification({
                 type: "error",
                 message: "Something went wrong. Please try again.",
                 duration: 5000,

@@ -4,9 +4,13 @@ import Button from "../UI/Button";
 import Input from "../UI/Input";
 import Background from "./Background";
 import Loading from "../Loading";
+import { useAuth } from "../../Hooks/useAuth";
+import { useNotification } from "../../Hooks/useNotification";
 
-const LoginPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated, setIsAuthenticated }) => {
+const LoginPage = ({ onAuthOtp}) => {
   const navigate = useNavigate();
+  const {isAuthenticated, setIsAuthenticated} = useAuth();
+  const {TriggerNotification} = useNotification();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +19,7 @@ const LoginPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated, setIsAut
     e.preventDefault();
     try {
       setIsLoading(true);
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/login`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -26,7 +30,7 @@ const LoginPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated, setIsAut
       const data = await res.json();
       if (!data.status) {
         if (data.type === "otp") {
-          onTriggerNotification({
+          TriggerNotification({
             type: "info",
             message: data.msg,
             duration: 3500,
@@ -35,7 +39,7 @@ const LoginPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated, setIsAut
           navigate(`/otp-verification/${data.id}/signup`);
           return;
         }
-        onTriggerNotification({
+        TriggerNotification({
           type: "error",
           message: data.msg,
           duration: 3500,
@@ -46,7 +50,7 @@ const LoginPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated, setIsAut
       const {token, id} = data;
       localStorage.setItem("token", token);
       localStorage.setItem("id", id);
-      onTriggerNotification({
+      TriggerNotification({
         type: "success",
         message: data.msg,
         duration: 3500,
@@ -54,7 +58,7 @@ const LoginPage = ({ onTriggerNotification, onAuthOtp, isAuthenticated, setIsAut
       setIsAuthenticated(true);
       navigate("/");
     } catch (err) {
-      onTriggerNotification({
+      TriggerNotification({
         type: "error",
         message: "Something went wrong. Please try later.",
         duration: 3500,

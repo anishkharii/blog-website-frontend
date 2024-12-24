@@ -10,7 +10,7 @@ const AdminPage = () => {
       try {
         setIsLoading(true);
         const res = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/users/${localStorage.getItem(
+          `${import.meta.env.VITE_BACKEND_URL}/users/${localStorage.getItem(
             "id"
           )}`,
           {

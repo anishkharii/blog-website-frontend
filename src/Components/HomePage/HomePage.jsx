@@ -2,10 +2,12 @@ import React from "react";
 import AdminPage from "./AdminPage";
 import UserPage from "./UserPage";
 import AuthorPage from "./AuthorPage";
+import { useAuth } from "../../Hooks/useAuth";
 
-const HomePage = ({ setIsAuthenticated, userDetails, role }) => {
+const HomePage = () => {
   const userId = localStorage.getItem("id");
-
+  const {userDetails} = useAuth();
+  const role = userDetails.role;
   if (role === "admin") {
     return <AdminPage />;
   }
@@ -18,9 +20,6 @@ const HomePage = ({ setIsAuthenticated, userDetails, role }) => {
           <AdminPage />
         ) : (
           <UserPage
-            setIsAuthenticated={setIsAuthenticated}
-            userId={userId}
-            userDetails={userDetails}
           />
         )}
       </>

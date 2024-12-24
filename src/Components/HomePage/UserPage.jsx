@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Background from '../LoginPage/Background'
 import Input from '../UI/Input'
 import Footer from '../MainPages/Footer';
+import { useAuth } from '../../Hooks/useAuth';
 
-const UserPage = ({  setIsAuthenticated, userDetails }) => {
-    const [blogs, setBlogs] = useState([]);
+const UserPage = () => {
+  const { userDetails } = useAuth();
+  const [blogs, setBlogs] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   
   useEffect(() => {
@@ -37,7 +39,7 @@ const UserPage = ({  setIsAuthenticated, userDetails }) => {
 
       fetchBlogs();
     
-  }, [ setIsAuthenticated]);
+  }, []);
 
 
 

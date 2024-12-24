@@ -9,5 +9,4 @@ export {default as ContactPage} from "../Components/MainPages/ContactPage";
 export {default as AboutUsPage} from "../Components/MainPages/AboutUsPage";
 export {default as PrivacyPolicy} from "../Components/MainPages/PrivacyPolicy";
 export {default as TermsAndConditions} from "../Components/MainPages/TermsAndConditions";
-export {default as useNotification} from "../Hooks/use-notification";
 export {default as SignOut} from "./Navbar/SignOut";
