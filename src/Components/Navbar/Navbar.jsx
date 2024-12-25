@@ -35,6 +35,7 @@ const Navbar = () => {
     } else {
       setMenuItems([
         { name: "Home", link: "/", current: true },
+        { name: "Blogs", link: "/blogs", current: false },
         { name: "Categories", link: "/categories", current: false },
         { name: "Contact Us", link: "/contact", current: false },
       ]);

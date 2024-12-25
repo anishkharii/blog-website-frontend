@@ -3,6 +3,7 @@ import Navbar from "../Components/Navbar/Navbar";
 import authRoutes from "./authRoutes";
 import generalRoutes from "./generalRoutes";
 import adminRoutes from "./adminRoutes";
+import blogRoutes from "./blogRoutes";
 
 
 function AppRoutes() {
@@ -11,6 +12,7 @@ function AppRoutes() {
       <Navbar />
       <Routes>
         {authRoutes}
+        {blogRoutes}
         {generalRoutes}
         {adminRoutes}
       </Routes>

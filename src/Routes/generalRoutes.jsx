@@ -1,7 +1,6 @@
 import { Route } from "react-router-dom";
 import {
   HomePage,
-  BlogsPage,
   ContactPage,
   AboutUsPage,
   PrivacyPolicy,
@@ -13,7 +12,6 @@ import {
 const generalRoutes = (
   <>
     <Route path="/" element={<HomePage />} />
-    <Route path="/blogs" element={<BlogsPage />} />
     <Route path="/contact" element={<ContactPage />} />
     <Route path="/about" element={<AboutUsPage />} />
     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
