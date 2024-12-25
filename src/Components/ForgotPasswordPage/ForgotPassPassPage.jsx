@@ -3,9 +3,9 @@ import Background from "../LoginPage/Background";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import { useNavigate, useParams } from "react-router-dom";
-import { useNotification } from "../../Hooks/useNotification";
+import { useNotification } from "../../Contexts/NotificationContext";
 
-const ForgotPassPassPage = ({ onAuthOtp }) => {
+const ForgotPassPassPage = () => {
   const navigate = useNavigate();
   const {TriggerNotification} = useNotification();
   const [password1, setPassword1] = useState("");

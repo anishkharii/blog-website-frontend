@@ -2,7 +2,7 @@ import React from "react";
 import AdminPage from "./AdminPage";
 import UserPage from "./UserPage";
 import AuthorPage from "./AuthorPage";
-import { useAuth } from "../../Hooks/useAuth";
+import { useAuth } from "../../Contexts/AuthContext";
 
 const HomePage = () => {
   const userId = localStorage.getItem("id");

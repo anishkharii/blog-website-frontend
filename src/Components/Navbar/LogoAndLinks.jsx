@@ -12,7 +12,7 @@ const LogoAndLinks = ({menuItems, menuOpen, setMenuOpen, onItemClick}) => {
           <ul className="hidden md:flex gap-5">
             {menuItems.map((item, i) => (
               <Link
-                to={item.href}
+                to={item.link}
                 onClick={() => onItemClick(i)}
                 className={` ${
                   item.current ? "" : "hover:bg-[#3c3c3f]"

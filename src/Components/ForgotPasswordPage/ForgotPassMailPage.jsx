@@ -3,12 +3,14 @@ import Background from '../LoginPage/Background'
 import Button from '../UI/Button'
 import Input from '../UI/Input'
 import { useNavigate } from 'react-router-dom'
-import { useNotification } from '../../Hooks/useNotification'
+import { useNotification } from '../../Contexts/NotificationContext'
+import { useAuth } from '../../Contexts/AuthContext'
 
-const ForgotPassMailPage = ({onAuthOtp}) => {
+const ForgotPassMailPage = () => {
     const navigate = useNavigate();
     const {TriggerNotification} = useNotification();
     const [email, setEmail] =  useState('');
+    const {setAuthOtp} = useAuth();
     const handleSubmit = async(e) => {
         e.preventDefault();
         try{
@@ -17,7 +19,7 @@ const ForgotPassMailPage = ({onAuthOtp}) => {
           const data = await res.json();
           console.log(data);
           if(data.status){
-            onAuthOtp(true);
+            setAuthOtp(true);
             TriggerNotification({
               type: "success",
               message: data.msg,

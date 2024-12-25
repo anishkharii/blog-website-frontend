@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Background from '../LoginPage/Background'
 import Input from '../UI/Input'
 import Footer from '../MainPages/Footer';
-import { useAuth } from '../../Hooks/useAuth';
+import { useAuth } from '../../Contexts/AuthContext';
 
 const UserPage = () => {
   const { userDetails } = useAuth();

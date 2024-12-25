@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useActionData } from "react-router-dom";
 import Button from "../UI/Button";
-import { useAuth } from "../../Hooks/useAuth";
+import { useAuth } from "../../Contexts/AuthContext";
 
 const SmallDeviceMenu = ({ menuItems, onItemClick }) => {
   const {isAuthenticated} = useAuth();

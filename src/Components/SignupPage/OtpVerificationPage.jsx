@@ -3,11 +3,13 @@ import OtpComponent from "./OtpComponent";
 import { useParams, useNavigate } from "react-router-dom";
 import Button from "../UI/Button";
 import Background from "../LoginPage/Background";
-import { useNotification } from "../../Hooks/useNotification";
+import { useNotification } from "../../Contexts/NotificationContext";
+import { useAuth } from "../../Contexts/AuthContext";
 
-const OtpVerificationPage = ({  onAuthForgot}) => {
+const OtpVerificationPage = () => {
   const navigate = useNavigate();
   const {TriggerNotification} = useNotification();
+  const {setAuthForgot} = useAuth();
   const [otp, setOtp] = useState("");
 
   const id = useParams().id;
@@ -39,7 +41,7 @@ const OtpVerificationPage = ({  onAuthForgot}) => {
         duration: 5000,
       });
       if(type==='forgot'){
-        onAuthForgot(true);
+        setAuthForgot(true);
         navigate(`/forgot-password/${id}`);
       }
       else{

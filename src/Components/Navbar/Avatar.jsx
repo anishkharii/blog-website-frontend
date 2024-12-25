@@ -1,16 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, lazy } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../Hooks/useAuth";
+import { useAuth } from "../../Contexts/AuthContext";
+import Loading from "../Loading";
 
 const Avatar = () => {
-  const {userDetails} = useAuth();
+  const {userDetails, loading} = useAuth();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
-
+  if(loading){
+    return <Loading/>
+  }
   const userMenuItems = [
-    { href: "/profile", name: "Your Profile" },
+    { href: "/profile", name: "Your Profile" }, 
     { href: "/sign-out", name: "Sign Out" },
   ];
+  const nameFirstLetter = userDetails.name ? userDetails.name[0].toUpperCase() : "";
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -31,7 +35,7 @@ const Avatar = () => {
         className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center cursor-pointer"
         onClick={() => setUserMenuOpen(!userMenuOpen)}
       >
-        {userDetails.name.charAt(0).toUpperCase()}
+        {nameFirstLetter}
       </div>
       {userMenuOpen && (
         <ul className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-10">

@@ -4,41 +4,69 @@ import Button from "../UI/Button";
 import Avatar from "./Avatar";
 import SmallDeviceMenu from "./SmallDeviceMenu";
 import LogoAndLinks from "./LogoAndLinks";
-import '../../index.css';
-import { useAuth } from "../../Hooks/useAuth";
+import "../../index.css";
+import { useAuth } from "../../Contexts/AuthContext";
+import Loading from "../Loading";
 
 const Navbar = () => {
-  const {isAuthenticated, userDetails} = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { isAuthenticated, userDetails, loading } = useAuth();
   const menuRef = useRef(null);
 
-  const [menuItems, setMenuItems] = useState([
-    { href: "/", name: "Home", current: true },
-    { href: "/blogs", name: "Blogs", current: false },
-    { href: "/about", name: "About Us", current: false },
-    { href: "/contact", name: "Contact", current: false },
-  ]);
+  const [menuItems, setMenuItems] = useState([]);
 
-  const handleItemClick = (index) => {
-    setMenuItems(menuItems.map((item, i) => ({
-      ...item,
-      current: i === index,
-    })));
-    setMenuOpen(false);
-  };
-
-  const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setMenuOpen(false);
+  // Use useEffect to update menuItems based on user role
+  useEffect(() => {
+    if (userDetails.role === "admin") {
+      setMenuItems([
+        { name: "Dashboard", link: "/dashboard", current: true },
+        { name: "Manage Blogs", link: "/manage-blogs", current: false },
+        { name: "Manage Users", link: "/manage-users", current: false },
+        { name: "Manage Categories", link: "/manage-categories", current: false },
+      ]);
+    } else if (userDetails.role === "author") {
+      setMenuItems([
+        { name: "Home", link: "/", current: true },
+        { name: "Categories", link: "/categories", current: false },
+        { name: "My Blogs", link: "/my-blogs", current: false },
+        { name: "Write Blog", link: "/write-blog", current: false },
+        { name: "Contact Us", link: "/contact", current: false },
+      ]);
+    } else {
+      setMenuItems([
+        { name: "Home", link: "/", current: true },
+        { name: "Categories", link: "/categories", current: false },
+        { name: "Contact Us", link: "/contact", current: false },
+      ]);
     }
-  };
+  }, [userDetails, isAuthenticated]); 
 
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleItemClick = (index) => {
+    setMenuItems((prevItems) =>
+      prevItems.map((item, i) => ({
+        ...item,
+        current: i === index,
+      }))
+    );
+    setMenuOpen(false);
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>

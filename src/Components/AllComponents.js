@@ -9,4 +9,7 @@ export {default as ContactPage} from "../Components/MainPages/ContactPage";
 export {default as AboutUsPage} from "../Components/MainPages/AboutUsPage";
 export {default as PrivacyPolicy} from "../Components/MainPages/PrivacyPolicy";
 export {default as TermsAndConditions} from "../Components/MainPages/TermsAndConditions";
+export {default as ForgotPassMailPage} from "../Components/ForgotPasswordPage/ForgotPassMailPage";
+export {default as ForgotPassPassPage} from "../Components/ForgotPasswordPage/ForgotPassPassPage";
+export {default as NotFound} from "../Components/NotFound";
 export {default as SignOut} from "./Navbar/SignOut";

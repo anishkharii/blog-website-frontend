@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../Hooks/useAuth";
-import { useNotification } from "../../Hooks/useNotification";
+import { useAuth } from "../../Contexts/AuthContext";
+import { useNotification } from "../../Contexts/NotificationContext";
 
 const SignOut = () => {
   const navigate = useNavigate();

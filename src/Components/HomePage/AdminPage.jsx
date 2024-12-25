@@ -22,6 +22,7 @@ const AdminPage = () => {
           }
         );
         const data = await res.json();
+        console.log(data)
         setUsers(data.users);
       } catch (err) {
         console.error("Error fetching users:", err);

@@ -4,12 +4,12 @@ import Button from "../UI/Button";
 import Input from "../UI/Input";
 import Background from "./Background";
 import Loading from "../Loading";
-import { useAuth } from "../../Hooks/useAuth";
-import { useNotification } from "../../Hooks/useNotification";
+import { useAuth } from "../../Contexts/AuthContext";
+import { useNotification } from "../../Contexts/NotificationContext";
 
-const LoginPage = ({ onAuthOtp}) => {
+const LoginPage = () => {
   const navigate = useNavigate();
-  const {isAuthenticated, setIsAuthenticated} = useAuth();
+  const {isAuthenticated, setIsAuthenticated, setAuthOtp} = useAuth();
   const {TriggerNotification} = useNotification();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +35,7 @@ const LoginPage = ({ onAuthOtp}) => {
             message: data.msg,
             duration: 3500,
           });
-          onAuthOtp(true);
+          setAuthOtp(true);
           navigate(`/otp-verification/${data.id}/signup`);
           return;
         }
