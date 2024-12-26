@@ -4,6 +4,7 @@ import authRoutes from "./authRoutes";
 import generalRoutes from "./generalRoutes";
 import adminRoutes from "./adminRoutes";
 import blogRoutes from "./blogRoutes";
+import authorRoutes from "./authorRoutes";
 
 
 function AppRoutes() {
@@ -12,6 +13,7 @@ function AppRoutes() {
       <Navbar />
       <Routes>
         {authRoutes}
+        {authorRoutes}
         {blogRoutes}
         {generalRoutes}
         {adminRoutes}

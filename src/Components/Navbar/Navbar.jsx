@@ -29,7 +29,7 @@ const Navbar = () => {
         { name: "Home", link: "/", current: true },
         { name: "Categories", link: "/categories", current: false },
         { name: "My Blogs", link: "/my-blogs", current: false },
-        { name: "Write Blog", link: "/write-blog", current: false },
+        { name: "Write Blog", link: "/add-blog", current: false },
         { name: "Contact Us", link: "/contact", current: false },
       ]);
     } else {

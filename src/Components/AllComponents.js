@@ -4,7 +4,7 @@ export {default as Navbar} from "../Components/Navbar/Navbar";
 export {default as OtpVerificationPage} from "../Components/SignupPage/OtpVerificationPage";
 export {default as SignupPage} from "../Components/SignupPage/SignupPage";
 export {default as HomePage} from "./HomePage/HomePage";
-export {default as BlogsPage} from "../Components/MainPages/BlogsPage";
+export {default as BlogsPage} from "./BlogPages/BlogsPage";
 export {default as ContactPage} from "../Components/MainPages/ContactPage";
 export {default as AboutUsPage} from "../Components/MainPages/AboutUsPage";
 export {default as PrivacyPolicy} from "../Components/MainPages/PrivacyPolicy";

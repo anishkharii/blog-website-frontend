@@ -1,7 +1,7 @@
 import React from "react";
-import AdminPage from "./AdminPage";
-import UserPage from "./UserPage";
-import AuthorPage from "./AuthorPage";
+import AdminPage from "../AdminPages/AdminPage";
+import UserPage from "../UserPages/UserPage";
+import AuthorPage from "../AuthorPages/AuthorPage";
 import { useAuth } from "../../Contexts/AuthContext";
 
 const HomePage = () => {

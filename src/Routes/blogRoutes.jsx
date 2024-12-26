@@ -1,8 +1,8 @@
 import { Route } from "react-router-dom"
-import AddBlog from "../Components/MainPages/AddBlog"
+import AddBlog from "../Components/BlogPages/AddBlog"
 import { BlogsPage } from "../Components/AllComponents"
-import BlogPage from "../Components/MainPages/BlogPage";
-import UpdateBlog from "../Components/MainPages/UpdateBlog";
+import BlogPage from "../Components/BlogPages/BlogPage";
+import UpdateBlog from "../Components/BlogPages/UpdateBlog";
 
 
 const blogRoutes = (

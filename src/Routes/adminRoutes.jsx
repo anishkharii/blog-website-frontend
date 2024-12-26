@@ -1,6 +1,6 @@
 import { Route } from "react-router-dom";
-import AdminPage from "../Components/HomePage/AdminPage";
 import { PrivateAdminRoute } from "./privateRoutes";
+import AdminPage from "../Components/AdminPages/AdminPage";
 
 const adminRoutes = (
   <Route path="/dashboard" element={<PrivateAdminRoute />}>
