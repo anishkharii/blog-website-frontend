@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Input from "../UI/Input";
 import Background from "../LoginPage/Background";
 import Button from "../UI/Button";
@@ -11,10 +11,12 @@ const AddBlog = () => {
     title: "",
     category: "",
     body: "",
+    description: "",
     tags: "",
     subcategory: ""
   });
   const [visibility, setVisibility] = useState("public");
+  const descRef = useRef(null);
   const { TriggerNotification } = useNotification();
 
   const handleVisibilityChange = (event) => {
@@ -38,16 +40,30 @@ const AddBlog = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     const sendingData = {
-      ...formData,
+      title: formData.title,
+      category: formData.category,
+      body: formData.description+formData.body,
+      tags: formData.tags,
+      subcategory: formData.subcategory,
       userId: localStorage.getItem("id"),
       isPublished: visibility === "public" ? true : false,
     }
     console.log(sendingData)
+    if(formData.description.length < 100) {
+      TriggerNotification({
+        type: "error",
+        message: "Description should be at least 50 words",
+        duration: 3000,
+      });
+      descRef.current.focus();
+      return;
+    }
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs?id=${localStorage.getItem("id")}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify(sendingData),
       });
@@ -82,7 +98,7 @@ const AddBlog = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col px-3 py-5 border border-white/20 bg-[#060607] rounded-md"
+          className="flex flex-col px-3 py-5 border border-white/20 bg-[#060607] rounded-md w-[120%] md:w-auto"
         >
           <Input
             type="text"
@@ -123,7 +139,26 @@ const AddBlog = () => {
             onChange={handleChange}
           />
           </div>
+          <div className="flex justify-between px-2 mt-3">
+              <p className="text-sm text-white/80">
+                Description must be greater than 100 words
+              </p>
+              <p className="text-sm text-white/80">
+                 {formData.description.length}/100
+              </p>
+            </div>
+          <Input 
+            type="text"
+            name="description"
+            label="Description*"
+            value={formData.description}
+            placeholder="Enter a short description of your blog"
+            onChange={handleChange}
+            ref={descRef}
+            required
+          />
           <div className="flex flex-col px-2 text-left ">
+            <p className="text-sm text-white/80 mt-5">Can write HTML tags</p>
             <label htmlFor="body">Body*</label>
             <textarea
               className="py-1 px-2 rounded-md w-full bg-transparent border border-white/20"

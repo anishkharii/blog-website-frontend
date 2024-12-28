@@ -35,7 +35,7 @@ const SignupPage = () => {
     e.preventDefault();
     try{
       setIsLoading(true);
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/add-user`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -48,7 +48,7 @@ const Input = ({ label, forgotRequired, eyeRequired=true, type, className, ...pr
       <input
         {...props}
         type={type}
-        className={`${className} transition-all duration-200 outline-none focus:border-white p-2 rounded-md  bg-[#060607] border border-white/20  `}
+        className={`${className} disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 outline-none focus:border-white p-2 rounded-md  bg-[#060607] border border-white/20  `}
       />
     </div>
   );

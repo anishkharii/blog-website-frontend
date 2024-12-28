@@ -17,7 +17,7 @@ const OtpVerificationPage = () => {
   async function handleSubmit(e) {
     try {
       e.preventDefault();
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/verify-user/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/verify/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

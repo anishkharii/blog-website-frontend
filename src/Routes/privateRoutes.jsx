@@ -1,5 +1,6 @@
 import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "../Contexts/AuthContext";
+import { HomePage } from "../Components/AllComponents";
 
 export const PrivateOtpRoute = () => {
   const { authOtp } = useAuth();
@@ -13,5 +14,5 @@ export const PrivateForgotRoute = () => {
 
 export const PrivateAdminRoute = () => {
   const { userDetails } = useAuth();
-  return userDetails.role === "admin" ? <Outlet /> : <Navigate to="/" />;
+  return userDetails.role === "admin" ? <Outlet /> : <HomePage/>;
 };

@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react'
 import Button from '../UI/Button';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Pencil, Trash2 } from 'lucide-react';
-import { useNotification } from '../../Contexts/NotificationContext';
+import { useNotification } from '../../Contexts/NotificationContext'
+
+// async function getUserName(id){
+//   const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user-name/${id}`);
+//   const data = await res.json();
+//   if(!data.status) return "Unknown";
+//   return data.name;
+// }
 
 const BlogsPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -14,16 +21,22 @@ const BlogsPage = () => {
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs`);
         const data = await res.json();
         console.log(data);
+        if(!data.status) return;
+
         setBlogs(data.data);
       } catch(err){
         console.error("Failed to fetch blogs:", err);
       }
     }
     fetchBlogs();
-  },[])
+  },[]);
   function deleteBlog(id){
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/delete-blog/${id}`, {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/${id}?id=${localStorage.getItem("id")}`, {
       method: 'DELETE',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
     })
     .then(res => res.json())
     .then(data => {
@@ -32,15 +45,26 @@ const BlogsPage = () => {
         type: data.status ? "success" : "error",
         message: data.msg,
         duration: 3000,
-      })
-      setBlogs(blogs.filter(blog => blog._id !== id));
+      });
+      if(data.status) window.location.reload();
     })
     .catch(err => console.error("Failed to delete blog:", err));
   }
+  
 
   const getDate = (date)=>{
     const newDate = new Date(date).toDateString()
     return newDate;
+  }
+
+  const getAuthorName = (id) =>{
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/users/${id}/name`)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      return data.name
+    })
+    .catch(err => console.error("Failed to get author name:", err));
   }
   return (
     <div className='text-white flex flex-col items-center justify-center p-5 '>
@@ -57,7 +81,7 @@ const BlogsPage = () => {
             <h2 className='text-xl font-bold'>{blog.title}</h2>
             <div className='flex items-center justify-between'>
             <h6 className=' text-sm'><a href={`/category/${blog.category}`} className=' underline under'>{blog.category}</a></h6>
-            <h6 className=' text-xs'>-<i>Author</i></h6>
+            <h6 className=' text-xs'>-{getAuthorName(blog.userId) || "Unknown"}<i></i></h6>
             </div>
             <h6 className='text-sm text-white/70'>{getDate(blog.publishedAt)}</h6>
             <p className='text-gray-200'>

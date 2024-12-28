@@ -20,7 +20,7 @@ const UpdateBlog = () => {
   useEffect(()=>{
     async function fetchData(){
         try{
-            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blog/${id}`)
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/${id}`)
             const data = await res.json();
             console.log(data);
             const {title, category, body, tags, subcategory, isPublished} = data.data;
@@ -64,10 +64,11 @@ const UpdateBlog = () => {
     }
     console.log(sendingData)
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/update-blog/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/${id}?id=${localStorage.getItem("id")}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify(sendingData),
       });

@@ -6,7 +6,7 @@ import { useAuth } from "../../Contexts/AuthContext";
 
 const HomePage = () => {
   const userId = localStorage.getItem("id");
-  const {userDetails} = useAuth();
+  const { userDetails } = useAuth();
   const role = userDetails.role;
   if (role === "admin") {
     return <AdminPage />;
@@ -14,16 +14,7 @@ const HomePage = () => {
   if (role === "author") {
     return <AuthorPage />;
   } else {
-    return (
-      <>
-        {role === "admin" ? (
-          <AdminPage />
-        ) : (
-          <UserPage
-          />
-        )}
-      </>
-    );
+    return <UserPage />;
   }
 };
 

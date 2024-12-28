@@ -3,18 +3,22 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../Contexts/AuthContext";
 import Loading from "../Loading";
 
+
 const Avatar = () => {
-  const {userDetails, loading} = useAuth();
+  const { userDetails, loading } = useAuth();
+
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
-  if(loading){
-    return <Loading/>
+  if (loading) {
+    return <Loading />;
   }
   const userMenuItems = [
-    { href: "/profile", name: "Your Profile" }, 
+    { href: "/profile", name: "Your Profile" },
     { href: "/sign-out", name: "Sign Out" },
   ];
-  const nameFirstLetter = userDetails.name ? userDetails.name[0].toUpperCase() : "";
+  const nameFirstLetter = userDetails.name
+    ? userDetails.name[0].toUpperCase()
+    : "";
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -32,10 +36,19 @@ const Avatar = () => {
   return (
     <div className="relative" ref={userMenuRef}>
       <div
-        className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center cursor-pointer"
+        className={`w-8 h-8 rounded-full ${!userDetails.image && "bg-blue-500"}  text-white flex items-center justify-center cursor-pointer transition-all ${
+          userMenuOpen ? "border-2 border-white p-[0.5px] w-[33px] h-[33px]" : ""}`}
         onClick={() => setUserMenuOpen(!userMenuOpen)}
       >
-        {nameFirstLetter}
+        { userDetails.image ? (
+          <img
+            src={userDetails.image}
+            alt="avatar"
+            className="w-full h-full rounded-full"
+          />
+        ) : (
+          nameFirstLetter
+        )}
       </div>
       {userMenuOpen && (
         <ul className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-10">
@@ -44,6 +57,7 @@ const Avatar = () => {
               <Link
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors duration-150"
                 to={item.href}
+                onClick={() => setUserMenuOpen(false)}
               >
                 {item.name}
               </Link>

@@ -6,6 +6,9 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userDetails, setUserDetails] = useState({
     name: "",
+    fname: "",
+    lname: "",
+    image: "",
     email: "",
     role: "",
   });
@@ -24,7 +27,7 @@ export const AuthProvider = ({ children }) => {
       }
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/user/${id}`,
+          `${import.meta.env.VITE_BACKEND_URL}/users/${id}`,
           {
             method: "GET",
             headers: {
@@ -42,9 +45,13 @@ export const AuthProvider = ({ children }) => {
         }
         setUserDetails({
           name: data.user.fname + " " + data.user.lname,
+          fname: data.user.fname,
+          lname: data.user.lname,
           email: data.user.email,
           role: data.user.role,
+          image: data.user.image,
         });
+
         setIsAuthenticated(true);
       } catch (err) {
         console.error("Authentication check failed:", err);
