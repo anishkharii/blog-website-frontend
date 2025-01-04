@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify'; // Import DOMPurify for sanitizing HTML content
+import { useNotification } from '../../Contexts/NotificationContext';
 
 const BlogPage = () => {
+    const navigate = useNavigate();
     const [blog, setBlog] = useState({});
+    const {TriggerNotification} = useNotification();
     const id = useParams().id;
 
     useEffect(() => {
@@ -11,6 +14,15 @@ const BlogPage = () => {
             try {
                 const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/${id}`);
                 const data = await response.json();
+                if(!data.status) {
+                    TriggerNotification({
+                        type: "error",
+                        message: data.msg,
+                        duration: 3000
+                    });
+                    navigate("/blogs");
+                    return;
+                }
                 setBlog(data.data);
                 fetchAuthorName(data.data.userId);
                 

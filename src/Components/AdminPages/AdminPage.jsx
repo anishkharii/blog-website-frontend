@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Loading from "../Loading";
+import { useAuth } from "../../Contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const UserSection = ({ title, userList, handleDelete }) => (
   <div className="mb-8">
@@ -20,7 +22,7 @@ const UserSection = ({ title, userList, handleDelete }) => (
             <td className="px-4 py-2">
               <button
                 className="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded"
-                onClick={() => handleDelete(user.id)}
+                onClick={() => handleDelete(user._id)}
               >
                 Delete
               </button>
@@ -33,10 +35,16 @@ const UserSection = ({ title, userList, handleDelete }) => (
 );
 
 const AdminPage = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const {isAuthenticated} = useAuth();
 
   useEffect(() => {
+    if(!isAuthenticated){
+      navigate("/");
+      return;
+    }
     const fetchUsers = async () => {
       try {
         setIsLoading(true);
@@ -61,7 +69,8 @@ const AdminPage = () => {
       }
     };
     fetchUsers();
-  }, []);
+  }, [isAuthenticated]);
+  
 
   const handleDelete = async (userId) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;

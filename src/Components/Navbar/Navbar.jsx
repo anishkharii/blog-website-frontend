@@ -7,27 +7,30 @@ import LogoAndLinks from "./LogoAndLinks";
 import "../../index.css";
 import { useAuth } from "../../Contexts/AuthContext";
 import Loading from "../Loading";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "../../Contexts/ThemeContext";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { isAuthenticated, userDetails, loading } = useAuth();
+  const {theme, toggleTheme} = useTheme();
   const menuRef = useRef(null);
 
   const [menuItems, setMenuItems] = useState([]);
 
-  // Use useEffect to update menuItems based on user role
   useEffect(() => {
+
     if (userDetails.role === "admin") {
       setMenuItems([
-        { name: "Dashboard", link: "/dashboard", current: true },
+        { name: "Home", link: "/", current: true },
+        { name: "Dashboard", link: "/dashboard", current: false },
         { name: "Manage Blogs", link: "/manage-blogs", current: false },
-        { name: "Manage Users", link: "/manage-users", current: false },
-        { name: "Manage Categories", link: "/manage-categories", current: false },
-      ]);
+        { name: "Manage Users", link: "/manage-users", current: false }
+      ]); 
     } else if (userDetails.role === "author") {
       setMenuItems([
         { name: "Home", link: "/", current: true },
-        { name: "Categories", link: "/categories", current: false },
+        { name: "Blogs", link: "/blogs", current: false },
         { name: "My Blogs", link: "/my-blogs", current: false },
         { name: "Write Blog", link: "/add-blog", current: false },
         { name: "Contact Us", link: "/contact", current: false },
@@ -36,11 +39,10 @@ const Navbar = () => {
       setMenuItems([
         { name: "Home", link: "/", current: true },
         { name: "Blogs", link: "/blogs", current: false },
-        { name: "Categories", link: "/categories", current: false },
         { name: "Contact Us", link: "/contact", current: false },
       ]);
     }
-  }, [userDetails, isAuthenticated]); 
+  }, [userDetails.role, isAuthenticated]); 
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -78,6 +80,19 @@ const Navbar = () => {
           setMenuOpen={setMenuOpen}
           onItemClick={handleItemClick}
         />
+        {/* {
+          theme === "dark" ? (
+            <Sun
+              className="text-white cursor-pointer"
+              onClick={() => toggleTheme("light")}
+            />
+          ) : (
+            <Moon
+              className="text-white cursor-pointer"
+              onClick={() => toggleTheme("dark")}
+            />
+          )
+        } */}
         {isAuthenticated ? (
           <Avatar name={userDetails.name} />
         ) : (

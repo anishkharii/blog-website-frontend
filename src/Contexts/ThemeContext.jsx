@@ -9,8 +9,7 @@ export const ThemeProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    document.documentElement.className = theme;
-    localStorage.setItem("theme", theme);
+    
   }, [theme]);
 
   function toggleTheme() {
@@ -20,7 +19,7 @@ export const ThemeProvider = ({ children }) => {
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
-    </ThemeContext.Provider>
+    </ThemeContext.Provider> 
   );
 };
 

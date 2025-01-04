@@ -52,7 +52,7 @@ const AddBlog = () => {
     if(formData.description.length < 100) {
       TriggerNotification({
         type: "error",
-        message: "Description should be at least 50 words",
+        message: "Description should be at least 100 letters.",
         duration: 3000,
       });
       descRef.current.focus();
@@ -141,7 +141,7 @@ const AddBlog = () => {
           </div>
           <div className="flex justify-between px-2 mt-3">
               <p className="text-sm text-white/80">
-                Description must be greater than 100 words
+                Description must be greater than 100 letters
               </p>
               <p className="text-sm text-white/80">
                  {formData.description.length}/100

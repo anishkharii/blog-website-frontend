@@ -20,12 +20,22 @@ export const AuthProvider = ({ children }) => {
   const token = localStorage.getItem("token");
   useEffect(() => {
     const checkAuthentication = async () => {
+      console.log("Checking authentication...");
       if (!id || !token) {
         setIsAuthenticated(false);
         setLoading(false); 
+        setUserDetails({
+          name: "",
+          fname: "",
+          lname: "",
+          image: "",
+          email: "",
+          role: "",
+        })
         return;
       }
       try {
+        
         const res = await fetch(
           `${import.meta.env.VITE_BACKEND_URL}/users/${id}`,
           {
@@ -37,7 +47,6 @@ export const AuthProvider = ({ children }) => {
           }
         );
         const data = await res.json();
-        console.log(data);
         if (!data.status) {
           setIsAuthenticated(false);
           setLoading(false); 
@@ -62,7 +71,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     checkAuthentication();
-  }, [setIsAuthenticated, setUserDetails, id, token]);
+  }, [isAuthenticated, setIsAuthenticated, setUserDetails, id, token]);
 
   return (
     <AuthContext.Provider

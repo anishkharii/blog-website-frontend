@@ -62,7 +62,6 @@ const UpdateBlog = () => {
       ...formData,
       userId: localStorage.getItem("id")
     }
-    console.log(sendingData)
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/${id}?id=${localStorage.getItem("id")}`, {
         method: "PUT",
@@ -73,7 +72,6 @@ const UpdateBlog = () => {
         body: JSON.stringify(sendingData),
       });
       const data = await res.json();
-      console.log(data);
       if (data.status) {
         TriggerNotification({
           type: "success",

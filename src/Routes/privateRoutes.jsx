@@ -16,3 +16,8 @@ export const PrivateAdminRoute = () => {
   const { userDetails } = useAuth();
   return userDetails.role === "admin" ? <Outlet /> : <HomePage/>;
 };
+
+export const PrivateLoggedInRoute = () => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <Outlet /> : <Navigate to="/logIn" />;
+}
