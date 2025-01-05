@@ -39,7 +39,7 @@ const ManageBlogs = () => {
   }, [filter, sort, page]);
 
   return (
-    <div className="text-white flex flex-col items-center justify-center p-5 ">
+    <div className="text-white  flex flex-col items-center justify-center p-5 ">
       <h1 className="text-4xl font-bold mb-5">Manage Blogs</h1>
       <PrivateBlogList blogs={blogs} onFilter={setFilter} onSort={setSort} totalBlogs={totalBlogs} page={page} />
     </div>

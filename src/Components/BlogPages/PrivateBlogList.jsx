@@ -8,9 +8,9 @@ const PrivateBlogList = ({blogs, onFilter, onSort, totalBlogs, page}) => {
     const navigate = useNavigate();
 
   return (
-    <div>
-        <div className="flex items-center justify-between mb-5">
-      <div className="flex gap-2 mr-36">
+    <div className='w-full m-0'>
+        <div className="flex items-center justify-between mb-5 mx-0">
+      <div className="flex flex-col md:flex-row gap-1 md:mr-36">
       <select
           onChange={(e)=>onFilter(e.target.value)}
           className="bg-[#060607] border border-white/20 text-white p-2 rounded-md"
@@ -42,7 +42,7 @@ const PrivateBlogList = ({blogs, onFilter, onSort, totalBlogs, page}) => {
           Create Blog
         </Button>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 m-0">
         {blogs.length === 0 && <h1 className="text-2xl">No Blogs Found</h1>}
         {blogs.map((blog, i) => (
           <PrivateBlogComponent key={i} blog={blog} />

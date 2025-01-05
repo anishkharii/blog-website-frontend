@@ -2,35 +2,31 @@ import React, { useEffect, useState } from "react";
 import Loading from "../Loading";
 import { useAuth } from "../../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-
+import { useNotification } from "../../Contexts/NotificationContext";
+import Button from "../UI/Button";
 const UserSection = ({ title, userList, handleDelete }) => (
   <div className="mb-8">
     <h2 className="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">{title}</h2>
-    <table className="w-full text-left">
-      <thead>
-        <tr>
-          <th className="px-4 py-2">Name</th>
-          <th className="px-4 py-2">Email</th>
-          <th className="px-4 py-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
+    <div className="w-full text-left">
+      
+        <div className="grid grid-cols-5 ">
+          <span className="px-4 py-2 col-span-1">Name</span>
+          <span className="px-20 py-2 col-span-3">Email</span>
+          <span className="px-4 py-2 col-span-1">Actions</span>
+        </div>
         {userList.map((user) => (
-          <tr key={user.id} className="border-b border-gray-700">
-            <td className="px-4 py-2">{user.fname + " " + user.lname}</td>
-            <td className="px-4 py-2">{user.email}</td>
-            <td className="px-4 py-2">
-              <button
-                className="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded"
+          <div key={user.id} className="border-b border-gray-700 w-full grid items-center justify-center grid-cols-5">
+            <span className="px-4 py-2 col-span-1">{user.fname + " " + user.lname}</span>
+            <p className="px-4 py-2 col-span-3 line-clamp-2">{user.email}</p>
+              <Button
+                variant='destructive'
                 onClick={() => handleDelete(user._id)}
               >
                 Delete
-              </button>
-            </td>
-          </tr>
+              </Button>
+          </div>
         ))}
-      </tbody>
-    </table>
+    </div>
   </div>
 );
 
@@ -39,6 +35,7 @@ const AdminPage = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const {isAuthenticated} = useAuth();
+  const {TriggerNotification} = useNotification();
 
   useEffect(() => {
     if(!isAuthenticated){
@@ -51,7 +48,7 @@ const AdminPage = () => {
         const res = await fetch(
           `${import.meta.env.VITE_BACKEND_URL}/users?id=${localStorage.getItem(
             "id"
-          )}`,
+          )}&isDeleted=false`,
           {
             method: "GET",
             headers: {
@@ -77,7 +74,7 @@ const AdminPage = () => {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/users/${userId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${userId}?id=${localStorage.getItem("id")}`,
         {
           method: "DELETE",
           headers: {
@@ -88,7 +85,11 @@ const AdminPage = () => {
       );
       if (res.ok) {
         setUsers(users.filter((user) => user.id !== userId));
-        alert("User deleted successfully.");
+        TriggerNotification({
+          type: "success",
+          message: "User deleted successfully.",
+          duration: 3000,
+        })
       } else {
         alert("Failed to delete user.");
       }
@@ -107,7 +108,7 @@ const AdminPage = () => {
       <h1 className="text-4xl font-bold mb-6">Admin Page</h1>
       <p className="text-lg mb-10">Manage users effectively with this dashboard.</p>
 
-      <div className="w-full max-w-5xl bg-[#222] p-6 rounded-md shadow-md">
+      <div className="w-full max-w-5xl bg-[#222] p-2 rounded-md shadow-md">
         <UserSection title="Admins" userList={admins} handleDelete={handleDelete} />
         <UserSection title="Authors" userList={authors} handleDelete={handleDelete} />
         <UserSection title="Users" userList={regularUsers} handleDelete={handleDelete} />

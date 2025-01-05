@@ -9,7 +9,7 @@ const BlogList = ({blogs, onFilter, onSort, totalBlogs, page}) => {
     const navigate = useNavigate();
 
   return (
-    <div>
+    <div className='w-full '>
         <div className="flex items-center justify-between mb-5">
       <div className="flex gap-2 mr-36">
       <select
