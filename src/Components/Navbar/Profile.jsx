@@ -118,6 +118,17 @@ const Profile = () => {
           </Button>
         </div>
       )}
+      {
+        !editedUser.image && (
+          <Button
+            onClick={() => {
+              setIsImageField(true);
+            }}
+          >
+            Add Image
+          </Button>
+        )
+      }
       <div className="w-80 space-y-4">
         {isImageField && (
           <input

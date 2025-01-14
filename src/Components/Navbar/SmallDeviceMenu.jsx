@@ -20,13 +20,13 @@ const SmallDeviceMenu = ({ menuItems, onItemClick }) => {
           {item.name}
         </Link>
       ))}
-      {!isAuthenticated && (
-        <Link to="/logIn" className="w-[90%] my-2">
+      {/* {!isAuthenticated && (
+        <Link to="/logIn"  className="w-[90%] my-2">
           <Button variant="outline" className="w-full">
             Login
           </Button>
         </Link>
-      )}
+      )} */}
     </ul>
   );
 };

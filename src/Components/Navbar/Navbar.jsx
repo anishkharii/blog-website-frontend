@@ -67,9 +67,6 @@ const Navbar = () => {
     setMenuOpen(false);
   };
 
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <>
@@ -93,11 +90,14 @@ const Navbar = () => {
             />
           )
         } */}
-        {isAuthenticated ? (
+        {
+          !loading && (
+            <>
+            {isAuthenticated   ? (
           <Avatar name={userDetails.name} />
         ) : (
-          <div className="md:flex gap-5">
-            <Button variant="outline" className="hidden md:block">
+          <div className="flex md:gap-5">
+            <Button variant="outline" className="scale-[0.8] md:scale-100">
               <Link to="/logIn">Login</Link>
             </Button>
             <Button>
@@ -105,9 +105,13 @@ const Navbar = () => {
             </Button>
           </div>
         )}
+            </>
+          )
+        }
+        
       </nav>
       {menuOpen && (
-        <div ref={menuRef}>
+        <div ref={menuRef} className="sticky top-14 z-[1000] transition-all ">
           <SmallDeviceMenu
             menuItems={menuItems}
             onItemClick={handleItemClick}
