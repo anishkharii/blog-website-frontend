@@ -4,7 +4,11 @@ import { useAuth } from "../../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../Contexts/NotificationContext";
 import Button from "../UI/Button";
-const UserSection = ({ title, userList, handleDelete }) => (
+import { Copy } from "lucide-react";
+const UserSection = ({ title, userList, handleDelete }) => {
+  const navigate = useNavigate();
+  const {TriggerNotification} = useNotification();
+  return(
   <div className="mb-8">
     <h2 className="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">{title}</h2>
     <div className="w-full text-left">
@@ -16,8 +20,29 @@ const UserSection = ({ title, userList, handleDelete }) => (
         </div>
         {userList.map((user) => (
           <div key={user.id} className="border-b border-gray-700 w-full grid items-center justify-center grid-cols-5">
-            <span className="px-4 py-2 col-span-1">{user.fname + " " + user.lname}</span>
-            <p className="px-4 py-2 col-span-3 line-clamp-2">{user.email}</p>
+          <div className="flex flex-col md:flex-row items-center justify-between md:justify-start gap-2 px-4 py-2 col-span-1">
+          <div className=" w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+
+          { user.image ? (
+          <img
+            src={user.image}
+            alt="avatar"
+            className="w-full h-full rounded-full cursor-pointer"
+            onClick={()=>{
+              window.open(user.image, "_blank");
+            }}
+          />
+        ) : (
+          <span >{user.fname.charAt(0).toUpperCase()}</span>
+        )}
+          </div>
+            <span className="">{user.fname + " " + user.lname}</span>
+          </div>
+          <div className="flex flex-col md:flex-row md:gap-3 overflow-clip  justify-start items-end md:items-center px-4 py-2 col-span-3">
+
+            <p className=" line-clamp-3 self-start  ">{user.email}</p>
+            <Copy onClick={() => {navigator.clipboard.writeText(user.email); TriggerNotification({type:"success", message:"Email copied to clipboard"})}} className="cursor-pointer w-4 h-4"/>
+          </div>
               <Button
                 variant='destructive'
                 onClick={() => handleDelete(user._id)}
@@ -28,7 +53,8 @@ const UserSection = ({ title, userList, handleDelete }) => (
         ))}
     </div>
   </div>
-);
+  )
+}
 
 const AdminPage = () => {
   const navigate = useNavigate();
