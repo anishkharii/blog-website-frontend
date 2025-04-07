@@ -4,6 +4,7 @@ import Background from "../LoginPage/Background";
 import Button from "../UI/Button";
 import { useNotification } from "../../Contexts/NotificationContext";
 import { useNavigate, useParams } from "react-router-dom";
+import { useUpdateBlog } from "../../Hooks/useBlogActions";
 
 const UpdateBlog = () => {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ const UpdateBlog = () => {
     isPublished: true
   });
   const { TriggerNotification } = useNotification();
+  const {mutate:updateBlog} = useUpdateBlog();
+
   const id = useParams().id;
   useEffect(()=>{
     async function fetchData(){
@@ -58,38 +61,7 @@ const UpdateBlog = () => {
   }
   async function handleSubmit(e) {
     e.preventDefault();
-    const sendingData = {
-      ...formData,
-      userId: localStorage.getItem("id")
-    }
-    try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/${id}?id=${localStorage.getItem("id")}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
-        body: JSON.stringify(sendingData),
-      });
-      const data = await res.json();
-      if (data.status) {
-        TriggerNotification({
-          type: "success",
-          message: "Blog updated successfully",
-          duration: 3500,
-        });
-        navigate("/blogs");
-      } else {
-        TriggerNotification({
-          type: "error",
-          message: data.msg,
-          duration: 3500,
-        });
-      }
-
-    } catch (err) {
-      console.error("Failed to add blog:", err);
-    }
+    updateBlog({blogId:id, userId:localStorage.getItem("id"), token:localStorage.getItem("token"),formData})
   }
 
   return (

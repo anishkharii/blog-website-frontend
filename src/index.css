@@ -1,32 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --color-primary: #060607;
-    --color-secondary: #2d3748;
-    --color-accent: #4a5568;
-  }
+
+:root {
+  --color-primary: #ffffff;
+  --color-secondary: #1f2937;
+  --color-accent: #8b5cf6;
+  --color-dark-accent: #4c1d95;
+  --color-border: #e5e7eb;
+  --color-muted: #838384;
+  --color-bg-light: #f9fafb;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #0ea5e9;
 }
 
-@layer utilities {
-  .bg-primary {
-    background-color: var(--color-primary);
-  }
-  .bg-secondary {
-    background-color: var(--color-secondary);
-  }
-  .bg-accent {
-    background-color: var(--color-accent);
-  }
-  .text-primary {
-    color: var(--color-primary);
-  }
-  .text-secondary {
-    color: var(--color-secondary);
-  }
-  .text-accent {
-    color: var(--color-accent);
-  }
+
+.dark {
+  --color-primary: #0d1117;
+  --color-secondary: #f9fafb;
+  --color-accent: #a78bfa;
+  --color-dark-accent: #c4b5fd;
+  --color-border: #334155;
+  --color-muted: #9ca3af;
+  --color-bg-light: #1a212c;
+  --color-shadow: rgba(255, 255, 255, 0.088);
+
+  --color-success: #4ade80;
+  --color-error: #f87171;
+  --color-warning: #fbbf24;
+  --color-info: #38bdf8;
 }
+
+

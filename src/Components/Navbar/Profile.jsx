@@ -4,13 +4,11 @@ import { useAuth } from "../../Contexts/AuthContext";
 import Button from "../UI/Button";
 import { useNotification } from "../../Contexts/NotificationContext";
 import Loading from "../Loading";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
-  const { userDetails, loading } = useAuth();
+  const userDetails = useSelector(state=>state.auth.user)
   const {TriggerNotification} = useNotification();
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   const [editedUser, setEditedUser] = useState({
     firstName: userDetails.fname,

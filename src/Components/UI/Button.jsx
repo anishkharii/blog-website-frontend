@@ -1,21 +1,40 @@
-const Button = ({ children, className = "", variant = "default", ...props }) => {
-  // Define variant-specific styles
-  const baseStyles = "inline-flex items-center justify-center rounded-md text-sm font-medium px-4 py-2 h-9 m-2 shadow transition-colors whitespace-nowrap";
+import React from 'react';
+// import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-  const variantStyles = {
-    outline: "bg-transparent border border-white/40 hover:bg-[#3c3c3f] hover:border-none text-white",
-    default: "bg-white hover:bg-white/90 text-black",
-    destructive: "bg-red-500 hover:bg-red-600 text-white",
+const Button = ({ variant = 'primary', to, children, className, ...props }) => {
+  const baseStyles =
+    'px-4 py-2 rounded-full font-medium transition duration-300';
+
+  const variants = {
+    primary: 'bg-secondary text-primary hover:bg-primary hover:text-secondary border border-2 hover:border-accent',
+    secondary: 'border border-2 border-accent text-secondary hover:bg-accent hover:text-primary',
+    destructive: 'bg-red-500 text-primary hover:bg_error',
+    simple: 'bg-transparent text-secondary hover:bg-accent hover:text-primary',
   };
 
+  const combinedClasses = `${baseStyles} ${variants[variant]} ${className}`;
+  // If 'to' prop exists, render a Link instead of button
+  if (to) {
+    return (
+      <Link to={to} className={combinedClasses} {...props}>
+        {children}
+      </Link>
+    );
+  }
+
   return (
-    <button
-      {...props}
-      className={`${baseStyles} ${variantStyles[variant] || variantStyles.default} ${className}`.trim()}
-    >
+    <button className={combinedClasses} {...props}>
       {children}
     </button>
   );
 };
+
+// Button.propTypes = {
+//   variant: PropTypes.oneOf(['primary', 'secondary']),
+//   to: PropTypes.string, // Optional route path
+//   children: PropTypes.node.isRequired,
+//   className: PropTypes.string,
+// };
 
 export default Button;

@@ -12,7 +12,7 @@ const Input = ({ label, forgotRequired, eyeRequired=true, type, className, ...pr
           {forgotRequired && (
             <Link
               to="/forgot-password"
-              className="  text-white/80 text-sm hover:text-white hover:underline transition-all"
+              className="  text-secondary/80 text-sm hover:text-accent hover:underline transition-all"
             >
               Forgot Your Password?
             </Link>
@@ -20,20 +20,20 @@ const Input = ({ label, forgotRequired, eyeRequired=true, type, className, ...pr
         </div>
         <div
           className={` ${className} ${
-            isFocused && "border-white"
-          } flex items-center justify-start  rounded-md p-1 overflow-hidden bg-[#060607] border border-white/20  `}
+            isFocused && "border-border"
+          } flex items-center justify-start  rounded-md p-1 overflow-hidden bg-primary border border-border/20  `}
         >
           <input
             {...props}
             type={showPassword ? "text" : "password"}
-            className={` bg-transparent outline-none w-full m-1 text-white/80 `}
+            className={` bg-transparent outline-none w-full m-1 text-secondary/80 `}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             autoComplete="off"
           />
           <span
             onClick={() => setShowPassword(!showPassword)}
-            className=" hover:cursor-pointer hover:text-white/80"
+            className=" hover:cursor-pointer hover:text-secondary/80"
           >
             {eyeRequired && (showPassword ? <Eye className="m-1" /> : <EyeOff className="m-1" />)}
           </span>
@@ -48,7 +48,7 @@ const Input = ({ label, forgotRequired, eyeRequired=true, type, className, ...pr
       <input
         {...props}
         type={type}
-        className={`${className} disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 outline-none focus:border-white p-2 rounded-md  bg-[#060607] border border-white/20  `}
+        className={`${className} disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 outline-none focus:border-border p-2 rounded-md  bg-primary border border-secondary/20  `}
       />
     </div>
   );

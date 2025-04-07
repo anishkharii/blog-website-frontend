@@ -1,92 +1,67 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Input from "../UI/Input";
 import Footer from "../MainPages/Footer";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import BlogComponent from "../BlogPages/BlogComponent";
 import Pagination from "../UI/Pagination";
-
-import { BlogSkeleton } from './BlogSkeleton';
+import { BlogSkeleton } from "./BlogSkeleton";
+import { useQuery } from "@tanstack/react-query";
 
 const HomePage = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [totalBlogs, setTotalBlogs] = useState(0);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const page = parseInt(searchParams.get("page")) || 1;
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs?page=${page}`);
-        console.log(res)
-        const data = await res.json();
-        console.log(data)
-        if (!data.status) return;
 
-        setBlogs(data.data);
-        setTotalBlogs(data.total); 
-      } catch (err) {
-        console.error("Failed to fetch blogs:", err);
-      } finally {
-        setLoading(false);
+  const { isLoading, data, error } = useQuery({
+    queryKey: ["blogs"],
+    queryFn: async () => {
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/blogs`
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch blogs");
       }
-    };
+      return res.json();
+    },
+  });
 
-    fetchBlogs();
-  }, [page]);
+  const blogs = data?.data || [];
+  const totalBlogs = data?.total || 0;
 
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-  };
 
-  const filteredBlogs = blogs.filter((blog) =>
-    blog.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
 
   return (
-    <div className="flex flex-col min-h-screen text-white">
-      <main className="container mx-auto flex-grow py-8 px-4 z-50">
-        <div className="flex justify-center mb-6">
-          <Input
-            type="text"
-            value={searchQuery}
-            onChange={handleSearch}
-            placeholder="Search blogs..."
-            className="w-11/12 md:w-96"
-          />
-        </div>
+    <div className="flex flex-col min-h-screen mt-14">
+  <main className="container mx-auto flex-grow py-8 px-4 z-50">
+    <section>
+      <h3 className="text-2xl font-semibold mb-6 text-dark_accent">Recent Blogs</h3>
 
-        <section>
-          <h3 className="text-2xl font-semibold mb-4">Recent Blogs</h3>
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 10 }).map((_, index) => (
-                <BlogSkeleton key={index} />
-              ))}
-            </div>
-          ) : filteredBlogs.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredBlogs.map((blog) => (
-                <BlogComponent blog={blog} key={blog._id} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-gray-500">
-              No blogs found matching your search.
-            </p>
-          )}
-        </section>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {isLoading ? (
+          Array.from({ length: 10 }).map((_, index) => (
+            <BlogSkeleton key={index} />
+          ))
+        ) : blogs.length > 0 ? (
+          blogs.map((blog) => (
+            <BlogComponent blog={blog} key={blog._id} />
+          ))
+        ) : (
+          <div className="col-span-full text-center py-12">
+            <p className="text-muted text-lg">No blogs found matching your search.</p>
+          </div>
+        )}
+      </div>
+    </section>
 
-        <Pagination currPage={page} totalBlogs={totalBlogs} />
-      </main>
-      <Footer />
+    <div className="mt-10">
+      {/* <Pagination currPage={page} totalBlogs={totalBlogs} /> */}
     </div>
+  </main>
+
+  <Footer />
+</div>
+
   );
 };
 

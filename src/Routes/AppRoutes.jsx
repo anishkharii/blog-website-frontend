@@ -5,21 +5,11 @@ import generalRoutes from "./generalRoutes";
 import adminRoutes from "./adminRoutes";
 import blogRoutes from "./blogRoutes";
 import authorRoutes from "./authorRoutes";
+import { useAutoLogin } from "../Hooks/useUserActions";
 
 
 function AppRoutes() {
-  return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        {authRoutes}
-        {authorRoutes}
-        {blogRoutes}
-        {generalRoutes}
-        {adminRoutes}
-      </Routes>
-    </BrowserRouter>
-  );
+  
 }
 
 export default AppRoutes;

@@ -64,8 +64,8 @@ const BlogPage = () => {
     }
 
     return (
-        <div className='flex flex-col items-center justify-center text-white p-5 lg:p-[0_200px] '>
-            <h1 className='text-xl md:text-3xl font-bold text-center'>{blog.title}</h1>
+        <div className='flex font-sans flex-col items-center justify-center  p-5 lg:p-[0_200px] '>
+            <h1 className='text-xl md:text-3xl font-bold text-center font-heading'>{blog.title}</h1>
             <h1 className='text-sm md:text-xl italic self-end'>-{blog.author}</h1>
             <h1 className='text-sm md:text-xl font-bold self-start underline cursor-pointer hover:text-white/80'>{blog.category}</h1>
             <h1 className='text-sm md:text-xl text-white/50 self-start'>{getDate(blog.createdAt) || new Date().toDateString()}</h1>

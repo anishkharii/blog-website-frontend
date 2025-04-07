@@ -1,6 +1,7 @@
 import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "../Contexts/AuthContext";
 import { HomePage } from "../Components/AllComponents";
+import { useSelector } from "react-redux";
 
 export const PrivateOtpRoute = () => {
   const { authOtp } = useAuth();
@@ -13,11 +14,11 @@ export const PrivateForgotRoute = () => {
 };
 
 export const PrivateAdminRoute = () => {
-  const { userDetails } = useAuth();
-  return userDetails.role === "admin" ? <Outlet /> : <HomePage/>;
+  const user = useSelector(state=> state.auth.user)
+  return user.role === "admin" ? <Outlet /> : <HomePage/>;
 };
 
 export const PrivateLoggedInRoute = () => {
-  const { isAuthenticated } = useAuth();
+  const {isAuthenticated} = useSelector(state=>state.auth)
   return isAuthenticated ? <Outlet /> : <Navigate to="/logIn" />;
 }

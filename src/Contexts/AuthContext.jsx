@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     image: "",
     email: "",
     role: "",
-  });
+  }); 
   const [authOtp, setAuthOtp] = useState(false);
   const [authForgot, setAuthForgot] = useState(false);
   const [loading, setLoading] = useState(true); 

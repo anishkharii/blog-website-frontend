@@ -4,7 +4,7 @@ import Button from '../UI/Button';
 import PrivateBlogComponent from './PrivateBlogComponent';
 import Pagination from '../UI/Pagination';
 
-const PrivateBlogList = ({blogs, onFilter, onSort, totalBlogs, page}) => {
+const PrivateBlogList = ({blogs, onFilter, onSort, totalBlogs, page }) => {
     const navigate = useNavigate();
 
   return (

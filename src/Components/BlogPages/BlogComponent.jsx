@@ -13,24 +13,27 @@ const BlogComponent = ({ blog }) => {
   return (
     <div
       key={blog.id}
-      className="border rounded-lg shadow-md p-4 bg-[#060607] hover:shadow-lg transition w-full h-68 flex flex-col justify-between overflow-hidden"
+      onClick={() => navigate(`/blog/${blog._id}`)}
+      className="mx-auto flex w-full max-w-[500px] flex-col justify-between overflow-hidden rounded-2xl border border-border bg-primary p-5 shadow-md shadow-shadow hover:shadow-shadow  transition duration-300 hover:shadow-xl"
     >
       <div>
-        <h4 className="text-lg font-bold mb-2 line-clamp-2">{blog.title}</h4>
-        <div className="flex flex-col ">
-          <h5 className="text-gray-500 mb-2">{convertDate(blog.createdAt)}</h5>
-          <div className="flex items-center  gap-2">
-            <Eye className="text-gray-500" size={16} />
+        <h4 className="mb-3 line-clamp-2 font-heading text-xl font-semibold text-secondary">
+          {blog.title}
+        </h4>
 
-            <h5 className="text-gray-500 ">{blog.views}</h5>
+        <div className="mb-3 flex flex-col text-sm text-muted">
+          <h5 className="mb-1">{convertDate(blog.createdAt)}</h5>
+          <div className="flex items-center gap-2">
+            <Eye size={16} />
+            <span>{blog.views}</span>
           </div>
         </div>
-        <p className="text-gray-200 text-md overflow-hidden line-clamp-5">
-          {blog.body}
-        </p>
+
+        <p className="line-clamp-5 text-base text-secondary">{blog.body}</p>
       </div>
+
       <button
-        className="text-blue-500 mt-2 underline self-start"
+        className="mt-3 self-start font-medium text-dark_accent underline transition hover:text-blue-400"
         onClick={() => navigate(`/blog/${blog._id}`)}
       >
         Read More

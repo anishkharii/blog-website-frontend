@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useNotification } from "../../Contexts/NotificationContext";
 import PrivateBlogList from "../BlogPages/PrivateBlogList";
-
+import { useQuery } from "@tanstack/react-query";
+import { useShowAllBlogs } from "../../Hooks/useBlogActions";
 
 
 const ManageBlogs = () => {
-  const [blogs, setBlogs] = useState([]);
   const [filter, setFilter] = useState("all");
   const [sort, setSort] = useState("new");
   const [totalBlogs, setTotalBlogs] = useState(0);
@@ -15,28 +15,10 @@ const ManageBlogs = () => {
 
   const page = parseInt(searchParams.get("page")) || 1;
 
-
-  useEffect(() => {
-    async function fetchBlogs() {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/blogs?${
-            filter === "all"
-              ? ""
-              : `isPublished=${filter === "public" ? true : false}`
-          }&sort=${sort}&page=${page}`
-        );
-        const data = await res.json();
-        if (!data.status) return;
-
-        setBlogs(data.data);
-        setTotalBlogs(data.total);
-      } catch (err) {
-        console.error("Failed to fetch blogs:", err);
-      }
-    }
-    fetchBlogs();
-  }, [filter, sort, page]);
+  const {data} = useShowAllBlogs();
+  console.log(data)
+  const blogs = data?.data || [];
+  
 
   return (
     <div className="text-white  flex flex-col items-center justify-center p-5 ">
