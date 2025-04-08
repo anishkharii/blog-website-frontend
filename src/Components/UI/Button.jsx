@@ -11,6 +11,8 @@ const Button = ({ variant = 'primary', to, children, className, ...props }) => {
     secondary: 'border border-2 border-accent text-secondary hover:bg-accent hover:text-primary',
     destructive: 'bg-red-500 text-primary hover:bg_error',
     simple: 'bg-transparent text-secondary hover:bg-accent hover:text-primary',
+    small_primary: 'px-2 py-1 text-sm bg-secondary text-primary hover:bg-primary hover:text-secondary border border-2 hover:border-accent',
+    small_secondary: 'px-2 py-1 text-sm border border-2 border-accent text-secondary hover:bg-accent hover:text-primary',
   };
 
   const combinedClasses = `${baseStyles} ${variants[variant]} ${className}`;
