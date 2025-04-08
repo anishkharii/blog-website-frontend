@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeUser } from "../../redux/authSlice";
+import { removeUser } from "../../Redux/authSlice";
 import { Link } from "react-router-dom";
 import Button from "../UI/Button";
 

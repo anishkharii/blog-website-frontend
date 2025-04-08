@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Sun, Moon, Search, Menu, X } from "lucide-react";
 
 import AvatarMenu from "./AvatarMenu";
-import { toggleTheme } from "../../redux/themeSlice";
+import { toggleTheme } from "../../Redux/themeSlice";
 import Button from "../UI/Button";
 
 const Navbar = () => {
