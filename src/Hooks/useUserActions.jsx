@@ -12,7 +12,7 @@ import {
   updateUser,
   deleteUser,
   getUserName,
-} from '../services/userServices';
+} from '../Services/userServices';
 import { setUser } from '../Redux/authSlice';
 
 export const useLogin = () => {
