@@ -8,7 +8,7 @@ import { useAuth } from "../../Contexts/AuthContext";
 import { useNotification } from "../../Contexts/NotificationContext";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
-import { loginUser } from "../../services/userServices";
+import { loginUser } from "../../Services/userServices";
 import { useLogin, useGetUser } from "../../Hooks/useUserActions";
 
 const LoginPage = () => {

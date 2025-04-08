@@ -6,9 +6,9 @@ import {
   deleteBlogById,
   deleteBlogsByQuery,
   showBlog,
-} from '../services/blogServices';
+} from '../Services/blogServices';
 import { useNavigate } from 'react-router-dom';
-import { useNotification } from '../contexts/NotificationContext';
+import { useNotification } from '../Contexts/NotificationContext';
 export const useAddBlog = () => useMutation(addBlog);
 export const useShowAllBlogs = () => {
   return useQuery({
