@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Button from "../UI/Button";
-import Background from "../LoginPage/Background";
 import Input from "../UI/Input";
 
 const ContactPage = () => {
@@ -25,7 +24,6 @@ const ContactPage = () => {
     }
   return (
     <div className="text-white flex flex-col items-center justify-center h-[80vh]">
-    <Background top={-200} left={-100}/>
     <div className="flex flex-col z-50 items-center justify-center">
 
       <h1 className="text-3xl font-bold">Contact Us</h1>

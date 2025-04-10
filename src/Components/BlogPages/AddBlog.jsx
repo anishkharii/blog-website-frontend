@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import Input from "../UI/Input";
-import Background from "../LoginPage/Background";
 import Button from "../UI/Button";
 import { useNotification } from "../../Contexts/NotificationContext";
 import { useNavigate } from "react-router-dom";
@@ -91,7 +90,6 @@ const AddBlog = () => {
 
   return (
     <div className="text-white flex flex-col items-center justify-center">
-      <Background top={-200} left={-100} />
       <div className="flex flex-col z-50 items-center justify-center">
         <h1 className="text-3xl font-bold">Add Blog</h1>
         <p className="text-lg mb-5">Enter details below to add your blog.</p>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Input from "../UI/Input";
-import Background from "../LoginPage/Background";
 import Button from "../UI/Button";
 import { useNotification } from "../../Contexts/NotificationContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -66,7 +65,7 @@ const UpdateBlog = () => {
 
   return (
     <div className="text-white flex flex-col items-center justify-center">
-      <Background top={-200} left={-100} />
+
       <div className="flex flex-col z-50 items-center justify-center">
         <h1 className="text-3xl font-bold">Update Blog</h1>
         <p className="text-lg mb-5"> Update the details of your blog</p>

@@ -9,7 +9,8 @@ export default function AvatarMenu() {
 
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
-  const avatarUrl = useSelector((state) => state.auth.user.image);
+  const avatarUrl = useSelector((state) => state.auth.user.image) ;
+  const userName = useSelector((state) => state.auth.user.fname);
   const toggleMenu = () => setOpen((prev) => !prev);
 
   useEffect(() => {
@@ -24,12 +25,18 @@ export default function AvatarMenu() {
 
   return (
     <div className="relative" ref={menuRef}>
+    {
+
+      avatarUrl ?
       <img
         src={avatarUrl}
         alt="User Avatar"
         onClick={toggleMenu}
         className="h-10 w-10 cursor-pointer rounded-full border border-accent"
-      />
+      />:<div className="h-10 w-10 cursor-pointer rounded-full border border-accent flex items-center justify-center bg-accent text-primary" onClick={toggleMenu}>
+      {userName.charAt(0).toUpperCase()}
+      </div>
+    }
       {open && (
         <div className="absolute right-0 z-50 mt-4 w-40 rounded-md bg-primary p-2 text-center shadow-lg">
           <Link

@@ -4,8 +4,8 @@ import { HomePage } from "../Components/AllComponents";
 import { useSelector } from "react-redux";
 
 export const PrivateOtpRoute = () => {
-  const { authOtp } = useAuth();
-  return authOtp ? <Outlet /> : <Navigate to="/signUp" />;
+  const {otpRequired} = useSelector(state=>state.auth)
+  return otpRequired ? <Outlet /> : <Navigate to="/signUp" />;
 };
 
 export const PrivateForgotRoute = () => {
@@ -20,5 +20,5 @@ export const PrivateAdminRoute = () => {
 
 export const PrivateLoggedInRoute = () => {
   const {isAuthenticated} = useSelector(state=>state.auth)
-  return isAuthenticated ? <Outlet /> : <Navigate to="/logIn" />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 }

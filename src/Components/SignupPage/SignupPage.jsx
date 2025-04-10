@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
-import Background from "../LoginPage/Background";
+import Logo from "../Navbar/Logo";
 import Loading from "../Loading";
+import { ArrowLeft } from "lucide-react";
 import { useNotification } from "../../Contexts/NotificationContext";
-import { useAuth } from "../../Contexts/AuthContext";
+import { useSignup } from "../../Hooks/useUserActions"
+import { useDispatch, useSelector } from "react-redux";
+import { setOtpRequired } from "../../Redux/authSlice";
+
+const roleTabs = ["user", "author"];
+
 const SignupPage = () => {
   const navigate = useNavigate();
-  const {TriggerNotification} = useNotification();
-  const [isLoading, setIsLoading] = useState(false);
-  const { isAuthenticated, setAuthOtp } = useAuth();
+  const dispatch = useDispatch();
+  const { otpRequired } = useSelector((state) => state.auth);
+
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -19,80 +25,49 @@ const SignupPage = () => {
     password: "",
     role: "user",
   });
-  isAuthenticated && navigate('/');
 
+  const { mutate: signup, isPending: isLoading } = useSignup();
+
+ 
   function handleChange(e) {
-    let name = e.target.name;
-    let value = e.target.value;
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    try{
-      setIsLoading(true);
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-  
-      const data = await res.json();
-      console.log(data);
-      TriggerNotification({
-        type: data.status ? "success" : "error",
-        message: data.msg,
-        duration: 5000,
-      });
-      if (data.status === true) {
-        setAuthOtp(true);
-        navigate(`/otp-verification/${data.data.id}/signup`);
-      }
-    }catch(err){
-      TriggerNotification({
-        type: "error",
-        message: err.message,
-        duration: 5000,
-      });
-      console.log(err);
-    }
-    finally{
-      setIsLoading(false);
-    }
-    
+    signup(formData); 
   }
-  return (
-    <div className="text-white text-center  flex flex-col md:items-center md:justify-center h-[120vh] md:h-[90vh] w-10/12 md:w-auto mt-10 md:mt-auto  mx-auto">
-      <Background />
-      {isLoading && <Loading/>}
-      <div className="z-50 border border-white/20 bg-[#060607]  rounded-lg p-5">
-     
 
-        <div className=" text-left">
-          <h2 className="text-2xl font-bold pb-2">Sign Up</h2>
-          <p className="text-sm text-white/60">
-            Enter your details to create your account
-          </p>
+  return (
+    <div className="mx-auto flex h-screen w-full flex-col items-center justify-center bg-gradient-to-r from-primary via-light_accent to-primary text-center text-secondary">
+      {isLoading && <Loading />}
+
+      <div className="relative z-50 rounded-lg border border-border bg-primary p-5 shadow-2xl shadow-shadow md:p-10">
+        <div className="mb-5 flex flex-col md:flex-row items-start md:items-center md:gap-32 justify-start ">
+          <div
+            className="flex cursor-pointer text-muted transition-all hover:text-secondary"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft />
+            Back
+          </div>
+          <Logo size="large" />
         </div>
-        <form className="flex flex-col gap-5 pt-10">
-          <div className="flex gap-5 flex-col md:flex-row">
+
+        <div className="text-left">
+          <h2 className="pb-2 text-2xl text-accent">Sign Up</h2>
+          <p className="text-sm text-muted">Create your new account</p>
+        </div>
+
+        <form className="flex flex-col gap-5 pt-10" onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-4 md:flex-row">
             <div>
-              <label
-                htmlFor="title"
-                className=" text-left block text-sm font-medium leading-6 text-white"
-              >
-                Title
-              </label>
+              <label className="block text-sm text-muted mb-1">Title</label>
               <select
                 name="title"
                 onChange={handleChange}
-                className=" border border-white/20 bg-[#09090b] rounded-lg p-2 w-[95%] md:w-auto"
+                className="rounded-lg border border-border bg-background p-2"
               >
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
@@ -102,86 +77,81 @@ const SignupPage = () => {
 
             <Input
               type="text"
-              name="fname"
               label="First Name"
+              name="fname"
               placeholder="John"
               onChange={handleChange}
+              required
             />
-
             <Input
               type="text"
               label="Last Name"
               name="lname"
               placeholder="Doe"
               onChange={handleChange}
+              required
             />
           </div>
 
           <Input
             type="email"
-            name="email"
             label="Email"
-            autoComplete="email"
+            name="email"
             placeholder="m@example.com"
             onChange={handleChange}
+            required
           />
-
           <Input
             type="password"
-            name="password"
             label="Password"
-            autoComplete="password"
+            name="password"
             onChange={handleChange}
+            required
           />
 
-          <Button onClick={handleSubmit}>Continue</Button>
+          {/* Role Tabs */}
+          <div className="flex gap-3">
+            {roleTabs.map((role) => (
+              <button
+                key={role}
+                type="button"
+                className={`px-4 py-2 rounded-full text-sm border ${
+                  formData.role === role
+                    ? "bg-accent text-white border-accent"
+                    : "bg-background text-muted border-border"
+                }`}
+                onClick={() => setFormData((prev) => ({ ...prev, role }))}
+              >
+                {role.charAt(0).toUpperCase() + role.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          <Button type="submit">Continue</Button>
         </form>
 
-        <p className="text-sm pt-5 px-8">
+        <p className="pt-5 text-sm">
           Already have an account?{" "}
           <a
             href="/login"
-            className=" underline underline-offset-2 hover:text-white/50  transition-all"
+            className="underline underline-offset-2 transition-all hover:text-accent"
           >
             Sign In
           </a>
         </p>
       </div>
 
-      <p className="text-sm pt-5 px-8 z-50">
+      <p className="z-50 px-8 pt-5 text-sm">
         By clicking continue, you agree to our{" "}
-        <a
-          href="#/"
-          className=" underline underline-offset-2 hover:text-white/50  transition-all"
-        >
+        <a className="underline hover:text-accent" href="#">
           Terms and Conditions
         </a>{" "}
         and{" "}
-        <a
-          href="/privacy-policy"
-          className=" underline underline-offset-2 hover:text-white/50  transition-all"
-        >
+        <a className="underline hover:text-accent" href="#">
           Privacy Policy
         </a>
         .
       </p>
-
-      <div className="flex gap-5 flex-col items-center justify-center text-white/20 md:flex-row text-[10px] mt-3 z-50">
-        <label
-          htmlFor="title"
-        >
-          To change you role
-        </label>
-        <select
-          name="role"
-          onChange={handleChange}
-          className=" border border-white/10 bg-[#09090b] rounded-lg p-2  md:w-auto"
-        >
-          <option value="user" className="text-white">User</option>
-          <option value="author" className="text-white">Author</option>
-          <option value="admin"  disabled>Admin</option>
-        </select>
-      </div>
     </div>
   );
 };

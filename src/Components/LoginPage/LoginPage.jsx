@@ -1,94 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
-import Background from "./Background";
 import Loading from "../Loading";
-import { useAuth } from "../../Contexts/AuthContext";
 import { useNotification } from "../../Contexts/NotificationContext";
-import { useDispatch } from "react-redux";
-import { useMutation } from "@tanstack/react-query";
-import { loginUser } from "../../Services/userServices";
 import { useLogin, useGetUser } from "../../Hooks/useUserActions";
+import { useSelector } from "react-redux";
+import Logo from "../Navbar/Logo";
+import { ArrowLeft, StepBack } from "lucide-react";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const {TriggerNotification} = useNotification();3
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const {mutate:login} = useLogin();
-  const {mutate:userData} = useGetUser();
+  const { mutate: login, isPending: isLoading } = useLogin();
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
-  // async function handleSubmit(e) {
-  //   e.preventDefault();
-  //   try {
-  //     setIsLoading(true);
-  //     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ email, password }),
-  //     });
-
-  //     const data = await res.json();
-  //     if (!data.status) {
-  //       if (data.type === "otp") {
-  //         TriggerNotification({
-  //           type: "info",
-  //           message: data.msg,
-  //           duration: 3500,
-  //         });
-  //         setAuthOtp(true);
-  //         navigate(`/otp-verification/${data.id}/signup`);
-  //         return;
-  //       }
-  //       TriggerNotification({
-  //         type: "error",
-  //         message: data.msg,
-  //         duration: 3500,
-  //       });
-  //       return;
-  //     }
-
-  //     const {token, id} = data;
-  //     localStorage.setItem("token", token);
-  //     localStorage.setItem("id", id);
-  //     TriggerNotification({
-  //       type: "success",
-  //       message: data.msg,
-  //       duration: 3500,
-  //     })
-  //     setIsAuthenticated(true);
-  //     navigate("/");
-  //   } catch (err) {
-  //     TriggerNotification({
-  //       type: "error",
-  //       message: "Something went wrong. Please try later.",
-  //       duration: 3500,
-  //     });
-  //     console.log(err);
-  //   }
-  //   finally {
-  //     setIsLoading(false);
-  //   }
-  // }
-  const dispatch = useDispatch();
-
-  const handleSubmit = async(e)=>{
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login({email, password});
-    userData({id:localStorage.getItem("id"), token:localStorage.getItem("token")});
-    
-  }
+    login({ email, password });
+  };
 
   return (
-    <div className=" text-secondary mt-16 text-center flex flex-col items-center justify-center h-[80vh] max-w-md mx-auto overflow-x-hidden">
-      {isLoading && <Loading/>}
-      <div className="border border-white/20 bg-primary rounded-lg p-5 md:p-10 z-50 shadow-2xl shadow-shadow">
+    <div className="mx-auto flex h-screen w-full flex-col items-center justify-center bg-gradient-to-r from-primary via-light_accent to-primary text-center text-secondary">
+      {isLoading && <Loading />}
+
+      <div className="relative z-50 rounded-lg border border-border bg-primary p-5 shadow-2xl shadow-shadow md:p-10">
+        <div className="mb-5 flex items-center justify-start gap-5">
+          <div
+            className="flex cursor-pointer text-muted transition-all hover:text-secondary"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft />
+            Back
+          </div>
+          <Logo size="large" />
+          <p></p>
+        </div>
         <div className="text-left">
-          <h2 className="text-2xl text-accent font-bold pb-2">Login</h2>
+          <h2 className="pb-2 text-2xl text-accent">Login</h2>
           <p className="text-sm text-muted">
             Enter your email below to login to your account
           </p>
@@ -120,25 +75,25 @@ const LoginPage = () => {
             Don't have an account?{" "}
             <a
               href="/signup"
-              className="underline underline-offset-2 hover:text-accent transition-all"
+              className="underline underline-offset-2 transition-all hover:text-accent"
             >
               Sign up
             </a>
           </p>
         </form>
       </div>
-      <p className="text-sm pt-5 px-8 z-50">
+      <p className="z-50 px-8 pt-5 text-sm">
         By clicking continue, you agree to our{" "}
         <a
           href="#/"
-          className="underline underline-offset-2 hover:text-accent transition-all"
+          className="underline underline-offset-2 transition-all hover:text-accent"
         >
           Terms and Conditions
         </a>{" "}
         and{" "}
         <a
           href="#/"
-          className="underline underline-offset-2 hover:text-accent transition-all"
+          className="underline underline-offset-2 transition-all hover:text-accent"
         >
           Privacy Policy
         </a>

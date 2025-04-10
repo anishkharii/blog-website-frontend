@@ -1,32 +1,27 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Input from "../UI/Input";
-import { useAuth } from "../../Contexts/AuthContext";
 import Button from "../UI/Button";
-import { useNotification } from "../../Contexts/NotificationContext";
 import Loading from "../Loading";
 import { useSelector } from "react-redux";
+import { useNotification } from "../../Contexts/NotificationContext";
+import { useUpdateUser } from "../../Hooks/useUserActions";
 
 const Profile = () => {
-  const userDetails = useSelector(state=>state.auth.user)
-  const {TriggerNotification} = useNotification();
+  const userDetails = useSelector((state) => state.auth.user);
+  console.log(userDetails)
+  const { TriggerNotification } = useNotification();
 
   const [editedUser, setEditedUser] = useState({
-    firstName: userDetails.fname,
-    lastName: userDetails.lname,
-    email: userDetails.email,
-    image: userDetails.image,
+    firstName: userDetails?.fname || "",
+    lastName: userDetails?.lname || "",
+    email: userDetails?.email || "",
+    image: userDetails?.image || "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+
   const [isEdited, setIsEdited] = useState(false);
-  const [isImageField, setIsImageField] = useState(false);
   const imageRef = useRef(null);
   const [imageFile, setImageFile] = useState(null);
-
-  useEffect(() => {
-    if (isImageField && imageRef.current) {
-      imageRef.current.click();
-    }
-  }, [isImageField]);
+  const { mutate: updateUserData, isPending: isLoading } = useUpdateUser();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -35,120 +30,73 @@ const Profile = () => {
   };
 
   const handleSaveChanges = async () => {
-    try {
-      setIsLoading(true);
-      const formData = new FormData();
-      formData.append("fname", editedUser.firstName);
-      formData.append("lname", editedUser.lastName);
-
-      if (imageFile) {
-        formData.append("image", imageFile); // Attach the image file
-      }
-
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/users/${localStorage.getItem(
-          "id"
-        )}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: formData, // Send FormData instead of JSON
-        }
-      );
-
-      const data = await res.json();
-      console.log(data)
-      if (data.status) {
-        TriggerNotification({
-          type: "success",
-          message: data.msg,
-          duration: 5000,
-        });
-        setIsImageField(false);
-        setIsEdited(false);
-        setEditedUser({
-          firstName: data.data.fname,
-          lastName: data.data.lname,
-          image: data.data.image,
-        });
-        
-      }
-
-      if (!data.status) {
-        TriggerNotification({
-          type: "error",
-          message: data.msg,
-          duration: 5000,
-        });
-      }
-    } catch (err) {
-      TriggerNotification({
+    if (!editedUser.firstName || !editedUser.lastName) {
+      return TriggerNotification({
         type: "error",
-        message: err.message,
-        duration: 5000,
-      })
-      console.error(err);
+        message: "First Name and Last Name cannot be empty.",
+        duration: 4000,
+      });
     }
-    finally {
-      setIsLoading(false);
+
+    const formData = new FormData();
+    formData.append("fname", editedUser.firstName);
+    formData.append("lname", editedUser.lastName);
+
+    if (imageFile) {
+      formData.append("image", imageFile);
     }
+
+    updateUserData({
+      id: localStorage.getItem("id"),
+      token: localStorage.getItem("token"),
+      formData,
+    });
   };
 
   return (
-    <div className="flex flex-col items-center justify-center text-white space-y-4">
-    {isLoading && <Loading/>}
+    <div className="flex flex-col items-center justify-center mt-20 text-secondary space-y-4">
+      {isLoading && <Loading />}
       <h1 className="text-3xl font-bold">Profile</h1>
-      {editedUser.image && (
-        <div className="relative flex items-center flex-col">
-          <img
-            src={editedUser.image}
-            alt="User"
-            className="w-24 h-24 rounded-full object-cover border-2 border-white hover:border-[#3c3c3f] cursor-pointer"
-          />
-          <Button
-            onClick={() => {
-              setIsImageField(true);
-            }}
-          >
-            Change Image
-          </Button>
-        </div>
-      )}
-      {
-        !editedUser.image && (
-          <Button
-            onClick={() => {
-              setIsImageField(true);
-            }}
-          >
+
+      <div className="relative flex items-center flex-col">
+        {editedUser.image ? (
+          <>
+            <img
+              src={editedUser.image}
+              alt="User"
+              className="w-24 h-24 rounded-full object-cover border-2 border-white hover:border-gray-400 cursor-pointer"
+              onClick={() => imageRef.current?.click()}
+            />
+            <Button onClick={() => imageRef.current?.click()}>
+              Change Image
+            </Button>
+          </>
+        ) : (
+          <Button onClick={() => imageRef.current?.click()}>
             Add Image
           </Button>
-        )
-      }
-      <div className="w-80 space-y-4">
-        {isImageField && (
-          <input
-            type="file"
-            name="avatar"
-            ref={imageRef}
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files[0];
-              if (file) {
-                setImageFile(file);
-                setEditedUser((prev) => ({
-                  ...prev,
-                  image: URL.createObjectURL(file),
-                }));
-              }
-              setIsEdited(true);
-              setIsImageField(false);
-            }}
-            style={{ display: "none" }}
-          />
         )}
+      </div>
+
+      <input
+        type="file"
+        ref={imageRef}
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) {
+            setImageFile(file);
+            setEditedUser((prev) => ({
+              ...prev,
+              image: URL.createObjectURL(file),
+            }));
+            setIsEdited(true);
+          }
+        }}
+        style={{ display: "none" }}
+      />
+
+      <div className="w-80 space-y-4">
         <Input
           type="text"
           label="First Name"
@@ -169,10 +117,12 @@ const Profile = () => {
           name="email"
           value={editedUser.email}
           disabled
-          onChange={handleInputChange}
         />
       </div>
-      {isEdited && <Button onClick={handleSaveChanges}>Save Changes</Button>}
+
+      {isEdited && (
+        <Button onClick={handleSaveChanges}>Save Changes</Button>
+      )}
     </div>
   );
 };

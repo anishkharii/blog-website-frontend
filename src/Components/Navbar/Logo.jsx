@@ -1,12 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Logo = () => {
+const Logo = ({size='small'}) => {
   return (
     <div>
-      <Link to="/">
-        <h1 className="text-2xl font-bold font-sans">TechTales</h1>
-      </Link>
+      <Link
+          to="/"
+          className={`flex items-center space-x-2 font-heading ${size==="small"?"text-xl":"text-3xl"} font-bold text-accent`}
+        >
+          <span>TechTales</span>
+        </Link>
     </div>
   );
 };

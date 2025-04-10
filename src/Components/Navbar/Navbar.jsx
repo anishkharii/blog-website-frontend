@@ -6,6 +6,7 @@ import { Sun, Moon, Search, Menu, X } from "lucide-react";
 import AvatarMenu from "./AvatarMenu";
 import { toggleTheme } from "../../Redux/themeSlice";
 import Button from "../UI/Button";
+import Logo from "./Logo";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -99,12 +100,7 @@ const Navbar = () => {
     <nav ref={navRef} className={navClasses}>
       <div className="max-w-8xl mx-auto flex items-center justify-between px-4 py-3 md:px-6">
         {/* Logo */}
-        <Link
-          to="/"
-          className="flex items-center space-x-2 font-heading text-xl font-bold text-accent"
-        >
-          <span>TechTales</span>
-        </Link>
+        <Logo/>
 
         {/* Desktop Nav */}
         <div className="ml-8 hidden items-center space-x-6 lg:flex">
@@ -157,7 +153,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Right Controls */}
-        <div className="flex items-center justify-center gap-4 lg:hidden">
+        <div className="flex items-center justify-center gap-1 lg:hidden">
           <button onClick={handleOpenSearch}>
             <Search className="h-6 w-6 text-secondary" />
           </button>

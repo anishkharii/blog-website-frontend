@@ -1,5 +1,6 @@
 
 export const addUser = async (userData) => {
+  console.log(userData)
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -9,16 +10,17 @@ export const addUser = async (userData) => {
     return res.json();
   };
   
-  export const verifyUser = async (id) => {
+  export const verifyUser = async ({id, otp, type}) => {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/verify/${id}`, {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ otp, type }),
     });
     if (!res.ok) throw new Error(await res.text());
     return res.json();
   };
   
   export const loginUser = async ({ email, password }) => {
-    console.log(email, password);
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -63,10 +65,11 @@ export const addUser = async (userData) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) throw new Error(await res.text());
-    return res.json();
+    return await res.json();
   };
   
   export const updateUser = async ({ id, token, formData }) => {
+    console.log(id, token, formData)
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/${id}`, {
       method: "PUT",
       headers: { Authorization: `Bearer ${token}` },

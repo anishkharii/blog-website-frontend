@@ -12,6 +12,7 @@ module.exports = {
         secondary: 'var(--color-secondary)', 
         accent: 'var(--color-accent)', 
         dark_accent: 'var(--color-dark-accent)' ,
+        light_accent: 'var(--color-light-accent)' ,
         bg_light: 'var(--color-bg-light)',    
         muted: 'var(--color-muted)',
         border: 'var(--color-border)',
