@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify'; 
 import { useNotification } from '../../Contexts/NotificationContext';
+import Markdown from 'react-markdown';
 
 const BlogPage = () => {
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ const BlogPage = () => {
                     return;
                 }
                 setBlog(data.data);
+                console.log(data.data)
                 fetchAuthorName(data.data.userId);
                 
             } catch (error) {
@@ -57,22 +59,19 @@ const BlogPage = () => {
         }
     },[blog.title]);
 
-    const sanitizedBody = blog.body ? DOMPurify.sanitize(blog.body) : '';
+    // const sanitizedBody = blog.body ? DOMPurify.sanitize(blog.body) : '';
     function getDate(date){
         const newDate = new Date(date).toDateString()
         return newDate;
     }
 
     return (
-        <div className='flex font-sans flex-col items-center justify-center  p-5 lg:p-[0_200px] '>
+        <div className='flex font-sans flex-col items-center justify-center mt-20  p-5 lg:p-[0_200px] '>
             <h1 className='text-xl md:text-3xl font-bold text-center font-heading'>{blog.title}</h1>
             <h1 className='text-sm md:text-xl italic self-end'>-{blog.author}</h1>
             <h1 className='text-sm md:text-xl font-bold self-start underline cursor-pointer hover:text-white/80'>{blog.category}</h1>
             <h1 className='text-sm md:text-xl text-white/50 self-start'>{getDate(blog.createdAt) || new Date().toDateString()}</h1>
-            <div 
-                className='text-lg p-1 lg:px-10' 
-                dangerouslySetInnerHTML={{ __html: sanitizedBody }} 
-            />
+            <Markdown>{blog.body}</Markdown>
         </div>
     );
 };

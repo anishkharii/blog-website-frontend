@@ -116,9 +116,7 @@ export const useUpdateUser = () => {
         message: data.msg,
         duration: 3500,
       });
-      queryClient.invalidateQueries({
-        queryKey: ['user']
-      });
+      queryClient.refetchQueries(["user"]);
     }
   })
 };

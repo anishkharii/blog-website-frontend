@@ -3,71 +3,84 @@ import Input from "../UI/Input";
 import Button from "../UI/Button";
 import { useNotification } from "../../Contexts/NotificationContext";
 import { useNavigate } from "react-router-dom";
+import MarkdownEditor from "react-markdown-editor-lite";
+import Markdown from "react-markdown";
+import "react-markdown-editor-lite/lib/index.css";
 
 const AddBlog = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    title: "",
-    category: "",
-    body: "",
-    description: "",
-    tags: "",
-    subcategory: ""
-  });
-  const [visibility, setVisibility] = useState("public");
+  const [step, setStep] = useState(1);
   const descRef = useRef(null);
   const { TriggerNotification } = useNotification();
 
-  const handleVisibilityChange = (event) => {
-    if(event.target.value === 'private') {
-      setVisibility('private');
-    }
-    else{
-        setVisibility('public');
-    }
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "",
+    subcategory: "",
+    tags: "",
+    description: "",
+    body: "",
+  });
+
+  const [visibility, setVisibility] = useState("public");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  function handleChange(e) {
-    let name = e.target.name;
-    let value = e.target.value;
+  const handleEditorChange = ({ text }) => {
+    setFormData((prev) => ({ ...prev, body: text }));
+  };
 
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  }
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const sendingData = {
-      title: formData.title,
-      category: formData.category,
-      body: formData.description+formData.body,
-      tags: formData.tags,
-      subcategory: formData.subcategory,
-      userId: localStorage.getItem("id"),
-      isPublished: visibility === "public" ? true : false,
-    }
-    console.log(sendingData)
-    if(formData.description.length < 100) {
+  const handleVisibilityChange = (e) => {
+    setVisibility(e.target.value);
+  };
+
+  const handleNext = () => {
+    if (step === 1 && formData.description.length < 100) {
       TriggerNotification({
         type: "error",
         message: "Description should be at least 100 letters.",
         duration: 3000,
       });
-      descRef.current.focus();
+      descRef.current?.focus();
       return;
     }
+    setStep((prev) => prev + 1);
+  };
+
+  const handlePrev = () => setStep((prev) => prev - 1);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const sendingData = {
+      title: formData.title,
+      category: formData.category,
+      subcategory: formData.subcategory,
+      tags: formData.tags,
+      description: formData.description,
+      body: formData.body,
+      userId: localStorage.getItem("id"),
+      isPublished: visibility === "public",
+    };
+
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs?id=${localStorage.getItem("id")}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(sendingData),
       });
+
       const data = await res.json();
-      console.log(data);
+
       if (data.status) {
         TriggerNotification({
           type: "success",
@@ -82,109 +95,100 @@ const AddBlog = () => {
           duration: 3000,
         });
       }
-
     } catch (err) {
       console.error("Failed to add blog:", err);
     }
-  }
+  };
 
   return (
-    <div className="text-white flex flex-col items-center justify-center">
-      <div className="flex flex-col z-50 items-center justify-center">
-        <h1 className="text-3xl font-bold">Add Blog</h1>
-        <p className="text-lg mb-5">Enter details below to add your blog.</p>
+    <div className="text-secondary flex flex-col items-center justify-center">
+      <div className="z-50 w-full max-w-2xl p-6 bg-primary rounded-lg border border-border">
+        <h1 className="text-3xl font-bold text-center mb-2">Add Blog</h1>
+        <p className="text-lg text-center mb-6">Step {step} of 3</p>
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col px-3 py-5 border border-white/20 bg-[#060607] rounded-md w-[120%] md:w-auto"
-        >
-          <Input
-            type="text"
-            name="title"
-            label="Title*"
-            placeholder="Your Title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-
-          <Input
-            type="text"
-            name="category"
-            label="Category*"
-            value={formData.category}
-            placeholder="e.g. Technology, Health, etc."
-            onChange={handleChange}
-            required
-          />
-        <div className="flex flex-col md:flex-row">
-          <Input
-            type="text"
-            name="subcategory"
-            label="Subcategory"
-            value={formData.subcategory}
-            className="md:w-[320px]"
-            placeholder="e.g. Artificial Intelligence, Nutrition"
-            onChange={handleChange}
-          />
-          <Input
-            type="text"
-            className="md:w-[320px]"
-            name="tags"
-            label="Tags"
-            value={formData.tags}
-            placeholder="e.g. AI, Wellness, Programming"
-            onChange={handleChange}
-          />
-          </div>
-          <div className="flex justify-between px-2 mt-3">
-              <p className="text-sm text-white/80">
-                Description must be greater than 100 letters
-              </p>
-              <p className="text-sm text-white/80">
-                 {formData.description.length}/100
-              </p>
+        <form onSubmit={handleSubmit}>
+          {step === 1 && (
+            <div className="space-y-4">
+              <Input type="text" name="title" label="Title*" value={formData.title} onChange={handleChange} required />
+              <Input type="text" name="category" label="Category*" value={formData.category} onChange={handleChange} required />
+              <Input type="text" name="subcategory" label="Subcategory" value={formData.subcategory} onChange={handleChange} />
+              <Input type="text" name="tags" label="Tags" value={formData.tags} onChange={handleChange} />
+              <div>
+                <div className="flex justify-between px-1 mb-1 text-sm text-muted">
+                  <span>Description must be at least 100 characters</span>
+                  <span>{formData.description.length}/100</span>
+                </div>
+                <Input
+                  type="text"
+                  name="description"
+                  label="Short Description*"
+                  value={formData.description}
+                  onChange={handleChange}
+                  ref={descRef}
+                  required
+                />
+              </div>
+              <div className="flex justify-end">
+                <Button type="button" onClick={handleNext}>
+                  Next
+                </Button>
+              </div>
             </div>
-          <Input 
-            type="text"
-            name="description"
-            label="Description*"
-            value={formData.description}
-            placeholder="Enter a short description of your blog"
-            onChange={handleChange}
-            ref={descRef}
-            required
-          />
-          <div className="flex flex-col px-2 text-left ">
-            <p className="text-sm text-white/80 mt-5">Can write HTML tags</p>
-            <label htmlFor="body">Body*</label>
-            <textarea
-              className="py-1 px-2 rounded-md w-full bg-transparent border border-white/20"
-              name="body"
-              rows="6"
-              value={formData.body}
-              placeholder="Enter your blog content here"
-              onChange={handleChange}
-              required
-            />
-          </div>
+          )}
 
-          <div className="flex flex-col px-2 text-left w-[110px] mt-3">
-            <label htmlFor="visibility">Visibility</label>
-            <select
-              name="visibility"
-              className="py-2 px-2 rounded-md bg-[#060607] text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/20"
-              onChange={handleVisibilityChange}
-              required
-            >
-              <option value="public"  >Public</option>
-              <option value="private" disabled>Private</option>
-            </select>
-          </div>
+          {step === 2 && (
+            <div className="space-y-4">
+              <p className="text-sm text-muted px-1">You can write markdown syntax below</p>
+              <label className="px-1 text-sm">Blog Body*</label>
+              <MarkdownEditor
+                value={formData.body}
+                style={{ height: "400px" }}
+                onChange={handleEditorChange}
+                renderHTML={(text) => <Markdown>{text}</Markdown>}
+              />
+              <div className="flex justify-between mt-4">
+                <Button type="button" onClick={handlePrev}>
+                  Previous
+                </Button>
+                <Button type="button" onClick={handleNext}>
+                  Next
+                </Button>
+              </div>
+            </div>
+          )}
 
-          <Button type="submit" className="mt-5">
-            Add Blog
-          </Button>
+          {step === 3 && (
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Preview</h2>
+              <div className="p-4 bg-background border border-border rounded-md">
+                <h3 className="text-xl font-bold mb-1">{formData.title}</h3>
+                <p className="text-muted mb-2">{formData.description}</p>
+                <Markdown>{formData.body}</Markdown>
+              </div>
+              <div className="mt-4">
+                <label htmlFor="visibility" className="block text-sm mb-1">
+                  Visibility
+                </label>
+                <select
+                  name="visibility"
+                  className="py-2 px-2 rounded-md bg-[#060607] text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/20"
+                  onChange={handleVisibilityChange}
+                  value={visibility}
+                >
+                  <option value="public">Public</option>
+                  <option value="private" >
+                    Private
+                  </option>
+                </select>
+              </div>
+              <div className="flex justify-between mt-4">
+                <Button type="button" onClick={handlePrev}>
+                  Previous
+                </Button>
+                <Button type="submit">Submit Blog</Button>
+              </div>
+            </div>
+          )}
         </form>
       </div>
     </div>
