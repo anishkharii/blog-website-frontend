@@ -108,7 +108,6 @@ export const useUpdateUser = () => {
   const {TriggerNotification} = useNotification();
   return useMutation({
     mutationFn: updateUser,
-    mutationKey: ["update-user"],
     onSuccess:(data)=>{
       dispatch(reduxUpdateUser(data.data));  
       TriggerNotification({
@@ -117,6 +116,11 @@ export const useUpdateUser = () => {
         duration: 3500,
       });
       queryClient.refetchQueries(["user"]);
+    },
+    onError:(error)=>{
+      const err = JSON.parse(error.message);
+      console.log(err)
+      
     }
   })
 };

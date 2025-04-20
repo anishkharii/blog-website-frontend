@@ -32,7 +32,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen mt-14">
+    <div className="flex flex-col min-h-screen ">
   <main className="container mx-auto flex-grow py-8 px-4 z-50">
     <section>
       <h3 className="text-2xl font-semibold mb-6 text-dark_accent">Recent Blogs</h3>

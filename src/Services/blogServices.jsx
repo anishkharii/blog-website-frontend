@@ -1,11 +1,13 @@
 
 
 
-export const addBlog = async ({ token, formData }) => {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs`, {
+export const addBlog = async ({ id, token, formData }) => {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs?id=${id}`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}` },
+      body: JSON.stringify(formData),
     });
     if (!res.ok) throw new Error(await res.text());
     return res.json();
@@ -21,13 +23,14 @@ export const addBlog = async ({ token, formData }) => {
     console.log(formData)
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/${blogId}?id=${userId}`, {
       method: "PUT",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+       },
+      body: JSON.stringify(formData),
     });
-    const data = await res.json();
-    console.log(data)
     if (!res.ok) throw new Error(await res.text());
-    return data;
+    return  res.json();
   };
   
   export const deleteBlogById = async ({ blogId, userId, token }) => {
@@ -51,7 +54,7 @@ export const addBlog = async ({ token, formData }) => {
     return res.json();
   };
   
-  export const showBlog = async (id) => {
+  export const showBlogById = async (id) => {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/${id}`);
     if (!res.ok) throw new Error(await res.text());
     return res.json();

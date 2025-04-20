@@ -26,9 +26,9 @@ const authSlice = createSlice({
             state.isAuthenticated = true;
         },
         updateUser:(state, action)=>{
-            state.user.fname = action.payload.user.fname;
-            state.user.lname = action.payload.user.lname;
-            state.user.image = action.payload.user.image;
+            state.user.fname = action.payload.fname;
+            state.user.lname = action.payload.lname;
+            state.user.image = action.payload.image;
         },
         removeUser:(state)=>{
             state.user = {

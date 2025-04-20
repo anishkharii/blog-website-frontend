@@ -66,7 +66,7 @@ const BlogPage = () => {
     }
 
     return (
-        <div className='flex font-sans flex-col items-center justify-center mt-20  p-5 lg:p-[0_200px] '>
+        <div className='flex font-sans flex-col items-center justify-center  lg:p-[0_200px] '>
             <h1 className='text-xl md:text-3xl font-bold text-center font-heading'>{blog.title}</h1>
             <h1 className='text-sm md:text-xl italic self-end'>-{blog.author}</h1>
             <h1 className='text-sm md:text-xl font-bold self-start underline cursor-pointer hover:text-white/80'>{blog.category}</h1>

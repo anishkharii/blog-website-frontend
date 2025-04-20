@@ -35,7 +35,7 @@ const BlogsPage = () => {
 
 
   return (
-    <div className="text-white flex flex-col items-center justify-center p-5 ">
+    <div className="text-white flex flex-col items-center justify-center  ">
       <h1 className="text-4xl font-bold mb-5">Blogs</h1>
       <BlogList blogs={blogs} onFilter={setFilter} onSort={setSort} totalBlogs={totalBlogs} page={page} />
     </div>

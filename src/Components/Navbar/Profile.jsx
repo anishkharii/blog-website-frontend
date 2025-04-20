@@ -8,7 +8,6 @@ import { useUpdateUser } from "../../Hooks/useUserActions";
 
 const Profile = () => {
   const userDetails = useSelector((state) => state.auth.user);
-  console.log(userDetails)
   const { TriggerNotification } = useNotification();
 
   const [editedUser, setEditedUser] = useState({
@@ -54,9 +53,9 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center mt-20 text-secondary space-y-4">
+    <div className="bg-gradient-to-br from-primary to-bg_light flex flex-col items-center justify-center  max-w-[400px] mx-auto p-5 border-border border rounded-lg shadow-xl ">
       {isLoading && <Loading />}
-      <h1 className="text-3xl font-bold">Profile</h1>
+      <h1 className="text-3xl font-bold mb-5">Profile</h1>
 
       <div className="relative flex items-center flex-col">
         {editedUser.image ? (
@@ -121,7 +120,7 @@ const Profile = () => {
       </div>
 
       {isEdited && (
-        <Button onClick={handleSaveChanges}>Save Changes</Button>
+        <Button onClick={handleSaveChanges} className='mt-5'>Save Changes</Button>
       )}
     </div>
   );

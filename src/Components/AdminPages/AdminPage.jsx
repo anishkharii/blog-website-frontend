@@ -11,9 +11,9 @@ const COLORS = ["#10B981", "#3B82F6", "#F59E0B"];
 
 // Stat Card Component
 const StatCard = ({ title, value, color }) => (
-  <div className={`p-4 rounded-lg shadow bg-${color}-500 text-white flex-1 text-center`}>
+  <div className={`p-5 rounded-lg shadow-lg bg-${color}-500 text-white flex-1 text-center transition transform hover:scale-105 hover:shadow-xl`}>
     <h3 className="text-lg font-medium">{title}</h3>
-    <p className="text-3xl font-bold mt-2">{value}</p>
+    <p className="text-4xl font-bold mt-2">{value}</p>
   </div>
 );
 
@@ -28,10 +28,10 @@ const UserSection = ({ title, userList, handleDelete }) => {
 
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-semibold mb-4 border-b border-gray-700 pb-2">{title}</h2>
-      <div className="divide-y divide-gray-700">
+      <h2 className="text-xl font-semibold mb-4 border-b border-border pb-2">{title}</h2>
+      <div className="divide-y divide-secondary">
         {userList.slice(0, visibleCount).map((user) => (
-          <div key={user._id} className="flex flex-wrap items-center py-3 gap-4">
+          <div key={user._id} className="flex items-center py-3 gap-4 hover:bg-muted/10 transition duration-300">
             <div className="flex items-center gap-3 w-48">
               <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center overflow-hidden">
                 {user.image ? (
@@ -42,9 +42,7 @@ const UserSection = ({ title, userList, handleDelete }) => {
                     onClick={() => window.open(user.image, "_blank")}
                   />
                 ) : (
-                  <span className="text-lg font-bold">
-                    {user.fname.charAt(0).toUpperCase()}
-                  </span>
+                  <span className="text-lg font-bold">{user.fname.charAt(0).toUpperCase()}</span>
                 )}
               </div>
               <span>{user.fname} {user.lname}</span>
@@ -82,7 +80,7 @@ const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const { isAuthenticated } = useSelector(state => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const { TriggerNotification } = useNotification();
 
   useEffect(() => {
@@ -173,23 +171,23 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-8 text-white bg-black min-h-screen p-8">
+    <div className="flex flex-col gap-8 text-secondary bg-primary min-h-screen p-6">
       {isLoading && <Loading />}
 
       <div>
         <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
-        <p className="text-gray-400">Manage your platform effectively and track user distribution.</p>
+        <p className="text-muted">Manage your platform effectively and track user distribution.</p>
       </div>
 
       {/* Stat Cards */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 mb-8">
         <StatCard title="Total Users" value={users.length} color="gray" />
         <StatCard title="Admins" value={admins.length} color="emerald" />
         <StatCard title="Authors" value={authors.length} color="blue" />
       </div>
 
       {/* Graph */}
-      <div className="bg-gray-800 rounded-lg p-4 shadow">
+      <div className="rounded-lg p-4 shadow-md bg-white">
         <h2 className="text-xl font-semibold mb-4">User Distribution</h2>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
@@ -219,12 +217,12 @@ const AdminDashboard = () => {
           placeholder="Search users by name or email..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-2 rounded bg-gray-800 border border-gray-600 text-white w-full"
+          className="p-2 rounded bg-primary border border-border text-secondary w-full"
         />
       </div>
 
       {/* User Sections */}
-      <div className="w-full bg-gray-900 p-4 rounded-lg">
+      <div className="w-full p-4 rounded-lg">
         <UserSection title="Admins" userList={filteredAdmins} handleDelete={handleDelete} />
         <UserSection title="Authors" userList={filteredAuthors} handleDelete={handleDelete} />
         <UserSection title="Users" userList={filteredUsers} handleDelete={handleDelete} />

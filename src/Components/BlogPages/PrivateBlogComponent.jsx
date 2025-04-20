@@ -1,3 +1,5 @@
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   BookOpen,
   BookOpenCheck,
@@ -6,78 +8,93 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
-import React from "react";
-import { Link } from "react-router-dom";
 import { useDeleteBlogById } from "../../Hooks/useBlogActions";
 
 const PrivateBlogComponent = ({ blog }) => {
   const { mutate: deleteBlogById } = useDeleteBlogById();
 
-  const getDate = (date) => new Date(date).toDateString();
+  const getDate = (date) => new Date(date).toLocaleDateString();
 
-  const deleteBlog = (id) => {
-    const confirmation = window.confirm("Are you sure you want to delete?");
-    if (!confirmation) return;
-    deleteBlogById({
-      blogId: id,
-      userId: localStorage.getItem("id"),
-      token: localStorage.getItem("token"),
-    });
+  const handleDelete = () => {
+    if (window.confirm("Are you sure you want to delete this blog?")) {
+      deleteBlogById({
+        blogId: blog._id,
+        userId: localStorage.getItem("id"),
+        token: localStorage.getItem("token"),
+      });
+    }
   };
 
   return (
-    <div className="bg-primary text-secondary relative grid grid-cols-[5fr_1fr] hover:bg-bg_light transition-all px-2 md:px-5 py-2 rounded-md border border-border shadow-shadow">
-      <div className="flex items-center gap-2">
-        {/* Status Icon with Tooltip */}
-        <div className="relative group">
-          {blog.isPublished ? (
-            <BookOpenCheck size={15} className="text-accent" />
-          ) : (
-            <FileLock size={15} className="text-secondary" />
-          )}
-          <div className="absolute bottom-full mb-2 w-max px-3 py-2 text-sm text-bg_light bg-dark_accent rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300 delay-[500ms]">
-            {blog.isPublished ? "Public Blog" : "Private Blog"}
-          </div>
-        </div>
+    <div className="relative flex max-w-7xl flex-col gap-4 rounded-xl border border-border bg-gradient-to-br from-primary to-bg_light p-4 text-secondary shadow-lg transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b border-border pb-3">
+        <div className="flex items-center gap-2">
+          {/* Status Badge */}
+          <span
+            className={`rounded-full px-2 py-1 text-xs font-medium ${
+              blog.isPublished
+                ? "bg-green-600 text-white"
+                : "bg-gray-500 text-white"
+            }`}
+          >
+            {blog.isPublished ? "Public" : "Private"}
+          </span>
 
-        <div>
-          <h2 className="text-sm md:text-lg font-bold line-clamp-3 md:line-clamp-2">
+          <h2 className="text-lg font-bold text-secondary md:text-2xl">
             {blog.title}
           </h2>
-          <h6 className="text-xs text-muted">{getDate(blog.publishedAt)}</h6>
+        </div>
+
+        <div className="flex items-center gap-3 text-sm text-muted">
+          <Eye size={18} />
+          <span>{blog.views}</span>
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 justify-between">
-        <div className="flex gap-2 md:gap-5 justify-end">
+      {/* Body */}
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-1">
+          <p className="text-sm text-muted">
+            Published: {getDate(blog.publishedAt)}
+          </p>
+          <div className="flex flex-wrap items-center gap-3 text-sm text-muted">
+            <span className="rounded-full bg-dark_accent px-2 py-1 text-xs font-medium text-bg_light">
+              {blog.category || "Uncategorized"}
+            </span>
+            <span>•</span>
+            <span>{blog.readTime || "5 min read"}</span>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-4">
           {/* View */}
           <Link to={`/blog/${blog._id}`} className="group relative">
-            <BookOpen className="w-5 text-secondary hover:text-accent transition-all" />
-            <div className="absolute bottom-full mb-2 w-max px-3 py-2 text-sm text-bg_light bg-dark_accent rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300 delay-[500ms]">
-              View Blog
+            <BookOpen className="w-5 text-secondary transition-all hover:text-accent" />
+            <div className="pointer-events-none absolute bottom-full z-50 mb-2 w-max rounded bg-dark_accent px-3 py-1 text-xs text-bg_light opacity-0 shadow transition-opacity delay-300 duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
+              View
             </div>
           </Link>
 
           {/* Edit */}
           <Link to={`/update-blog/${blog._id}`} className="group relative">
-            <Pencil className="w-5 text-secondary hover:text-accent transition-all" />
-            <div className="absolute bottom-full mb-2 w-max px-3 py-2 text-sm text-bg_light bg-dark_accent rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300 delay-[500ms]">
-              Edit Blog
+            <Pencil className="w-5 text-secondary transition-all hover:text-accent" />
+            <div className="pointer-events-none absolute bottom-full z-50 mb-2 w-max rounded bg-dark_accent px-3 py-1 text-xs text-bg_light opacity-0 shadow transition-opacity delay-300 duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
+              Edit
             </div>
           </Link>
 
           {/* Delete */}
-          <span onClick={() => deleteBlog(blog._id)} className="group relative">
-            <Trash2 className="w-5 cursor-pointer text-secondary hover:text-red-500 transition-all" />
-            <div className="absolute bottom-full mb-2 w-max px-3 py-2 text-sm text-bg_light bg-dark_accent rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300 delay-[500ms]">
-              Delete Blog
+          <span
+            onClick={handleDelete}
+            className="group relative cursor-pointer"
+          >
+            <Trash2 className="w-5 text-secondary transition-all hover:text-red-500" />
+            <div className="pointer-events-none absolute bottom-full z-50 mb-2 w-max rounded bg-dark_accent px-3 py-1 text-xs text-bg_light opacity-0 shadow transition-opacity delay-300 duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
+              Delete
             </div>
           </span>
-        </div>
-
-        <div className="flex items-center gap-2 justify-end text-sm">
-          <Eye size={18} className="text-secondary" />
-          <h5>{blog.views}</h5>
         </div>
       </div>
     </div>

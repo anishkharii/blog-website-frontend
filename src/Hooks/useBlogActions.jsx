@@ -5,11 +5,24 @@ import {
   updateBlog,
   deleteBlogById,
   deleteBlogsByQuery,
-  showBlog,
+  showBlogById,
 } from '../Services/blogServices';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../Contexts/NotificationContext';
-export const useAddBlog = () => useMutation(addBlog);
+export const useAddBlog = () =>{
+  const navigate = useNavigate();
+  const { TriggerNotification } = useNotification();
+  return useMutation({
+    mutationFn:addBlog,
+    onSuccess:()=>{
+      navigate(-1);
+      TriggerNotification({
+        type:"success",
+        message:"Blog Added Successfully"
+      });
+    }
+  })
+}
 export const useShowAllBlogs = () => {
   return useQuery({
     queryKey:['blogs'],
@@ -53,4 +66,12 @@ export const useDeleteBlogById = () =>{
   })
 }
 export const useDeleteBlogsByQuery = () => useMutation(deleteBlogsByQuery);
-export const useShowBlog = () => useMutation(showBlog);
+
+export const useGetBlogById = (id) => {
+  return useQuery({
+    queryKey: ['blog', id],
+    queryFn:()=> showBlogById(id),
+    enabled: !!id,
+    select:(data)=> data.data
+  });
+}

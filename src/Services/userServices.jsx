@@ -69,7 +69,6 @@ export const addUser = async (userData) => {
   };
   
   export const updateUser = async ({ id, token, formData }) => {
-    console.log(id, token, formData)
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/${id}`, {
       method: "PUT",
       headers: { Authorization: `Bearer ${token}` },

@@ -45,6 +45,7 @@ const AppRouter = () => {
 
   useEffect(() => {
     if (id && token) {
+      
       login({ id, token });
     }
   }, [id, token, login]);
