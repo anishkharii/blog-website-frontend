@@ -88,9 +88,12 @@ export const addUser = async (userData) => {
   };
   
   export const getUserName = async (id) => {
+    
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/${id}/name`);
     if (!res.ok) throw new Error(await res.text());
-    return res.json();
+    const data = await res.json();
+    console.log(data);
+    return data.name;
   };
   
   

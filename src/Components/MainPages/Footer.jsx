@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, Github } from "lucide-react";
+import { Facebook, Twitter, Instagram, Github, Linkedin } from "lucide-react";
 import Logo from "../Navbar/Logo";
 
 const Footer = () => {
@@ -11,10 +11,10 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { name: "Facebook", icon: <Facebook size={22} />, link: "https://facebook.com" },
-    { name: "Twitter", icon: <Twitter size={22} />, link: "https://twitter.com" },
-    { name: "Instagram", icon: <Instagram size={22} />, link: "https://instagram.com" },
-    { name: "GitHub", icon: <Github size={22} />, link: "https://github.com" },
+    { name: "Linkedin", icon: <Linkedin size={22} />, link: "https://www.linkedin.com/in/anishkhari/" },
+    { name: "Twitter", icon: <Twitter size={22} />, link: "https://x.com/anishkhari" },
+    { name: "Instagram", icon: <Instagram size={22} />, link: "https://www.instagram.com/anish_khari_" },
+    { name: "GitHub", icon: <Github size={22} />, link: "https://github.com/anishkharii" },
   ];
 
   return (
