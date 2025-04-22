@@ -6,21 +6,12 @@ import BlogComponent from "../BlogPages/BlogComponent";
 import Pagination from "../UI/Pagination";
 import { BlogSkeleton } from "./BlogSkeleton";
 import { useQuery } from "@tanstack/react-query";
+import { useShowAllBlogs } from "../../Hooks/useBlogActions";
 
 const HomePage = () => {
 
-  const { isLoading, data, error } = useQuery({
-    queryKey: ["blogs"],
-    queryFn: async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/blogs`
-      );
-      if (!res.ok) {
-        throw new Error("Failed to fetch blogs");
-      }
-      return res.json();
-    },
-  });
+  const [page, setPage] = useState(1);
+  const { isLoading, data, error } = useShowAllBlogs({page});
 
   const blogs = data?.data || [];
   const totalBlogs = data?.total || 0;
@@ -55,7 +46,7 @@ const HomePage = () => {
     </section>
 
     <div className="mt-10">
-      {/* <Pagination currPage={page} totalBlogs={totalBlogs} /> */}
+      <Pagination currPage={page} onPageChange={setPage} totalBlogs={totalBlogs} />
     </div>
   </main>
 

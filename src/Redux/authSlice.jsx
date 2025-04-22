@@ -10,6 +10,7 @@ const initialState = {
         image:"",
     },
     isAuthenticated:false,
+    isAuthLoading:false,
     otpRequired:false
 }
 
@@ -24,6 +25,7 @@ const authSlice = createSlice({
             state.user.lname = action.payload.user.lname;
             state.user.image = action.payload.user.image;
             state.isAuthenticated = true;
+            state.isAuthLoading = false;
         },
         updateUser:(state, action)=>{
             state.user.fname = action.payload.fname;
@@ -44,10 +46,13 @@ const authSlice = createSlice({
         },
         setOtpRequired:(state, action)=>{
             state.otpRequired = action.payload;
+        },
+        setIsAuthLoading:(state, action)=>{
+            state.isAuthLoading = action.payload;
         }
     }
 });
 
 
-export const {   setUser, updateUser, removeUser, setOtpRequired} = authSlice.actions;
+export const {   setUser, updateUser, removeUser, setOtpRequired, setIsAuthLoading} = authSlice.actions;
 export default authSlice.reducer;

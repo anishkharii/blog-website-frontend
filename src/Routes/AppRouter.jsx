@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import {
   LoginPage,
   SignupPage,
@@ -14,7 +14,7 @@ import {
   SignOut,
   NotFound,
   BlogsPage,
-} from '../Components/AllComponents';
+} from "../Components/AllComponents";
 
 import AddBlog from "../Components/BlogPages/AddBlog";
 import UpdateBlog from "../Components/BlogPages/UpdateBlog";
@@ -34,13 +34,10 @@ import { AuthLayout, MainLayout } from "./routesLayout";
 import { useAutoLogin } from "../Hooks/useUserActions";
 import BlogPage from "../Components/BlogPages/BlogPage";
 import Loading from "../Components/Loading";
-import { useSelector } from "react-redux";
 
 const AppRouter = () => {
-  const user = useSelector(state=>state.auth)
   const id = localStorage.getItem("id");
   const token = localStorage.getItem("token");
-
   const {mutate:login, isLoading}=useAutoLogin();
 
   useEffect(() => {
@@ -51,11 +48,11 @@ const AppRouter = () => {
   }, [id, token, login]);
 
   if(isLoading) {
-    return <div>Loading...</div>;
+    return <Loading/>
   }
   return (
     <BrowserRouter>
-      {isLoading && <Loading/>}
+      <Suspense fallback={<Loading />}>
       <Routes>
         {/* Auth Layout (No Navbar) */}
         <Route element={<AuthLayout />}>
@@ -105,6 +102,7 @@ const AppRouter = () => {
           </Route>
         </Route>
       </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 };

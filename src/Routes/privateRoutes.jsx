@@ -2,6 +2,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "../Contexts/AuthContext";
 import { HomePage } from "../Components/AllComponents";
 import { useSelector } from "react-redux";
+import Loading from "../Components/Loading";
 
 export const PrivateOtpRoute = () => {
   const {otpRequired} = useSelector(state=>state.auth)
@@ -15,7 +16,7 @@ export const PrivateForgotRoute = () => {
 
 export const PrivateAdminRoute = () => {
   const user = useSelector(state=> state.auth.user)
-  return user.role === "admin" ? <Outlet /> : <HomePage/>;
+  return (user.role === "admin" ? <Outlet /> : <HomePage/>)
 };
 
 export const PrivateLoggedInRoute = () => {

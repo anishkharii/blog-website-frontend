@@ -23,10 +23,12 @@ export const useAddBlog = () =>{
     }
   })
 }
-export const useShowAllBlogs = () => {
+export const useShowAllBlogs = ({page=1, filter="all", sort="new"}) => {
+
   return useQuery({
-    queryKey:['blogs'],
-    queryFn:showAllBlogs
+    queryKey:['blogs', page, filter, sort],
+    queryFn:()=>showAllBlogs(page, filter, sort),
+    keepPreviousData:true,
   });
 }
 export const useUpdateBlog = () => {

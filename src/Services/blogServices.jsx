@@ -13,8 +13,11 @@ export const addBlog = async ({ id, token, formData }) => {
     return res.json();
   }; 
   
-  export const showAllBlogs = async () => {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs`);
+  export const showAllBlogs = async ({ page, filter, sort }) => {
+    const limit = 12;
+    const res = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/blogs?page=${page}&limit=${limit}&isPublished=${filter}&sort=${sort}`
+    );
     if (!res.ok) throw new Error(await res.text());
     return res.json();
   };

@@ -13,7 +13,7 @@ import {
   deleteUser,
   getUserName,
 } from '../Services/userServices';
-import { setOtpRequired, setUser, updateUser as reduxUpdateUser } from '../Redux/authSlice';
+import { setOtpRequired, setUser, updateUser as reduxUpdateUser, setIsAuthLoading } from '../Redux/authSlice';
 import { useNotification } from '../Contexts/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -42,6 +42,7 @@ export const useLogin = () => {
 
 export const useSignup = () => {
   const navigate = useNavigate();
+  const {TriggerNotification} = useNotification();
   const dispatch = useDispatch();
   return useMutation({
     mutationFn: addUser,
@@ -49,6 +50,15 @@ export const useSignup = () => {
       dispatch(setOtpRequired(true));
       console.log(data)
       navigate("/otp-verification",{state:{from:"signup", id:data.data.id}});
+    },
+    onError:(error)=>{
+      const err = JSON.parse(error.message);
+      console.log(err)
+      TriggerNotification({
+        type: "error",
+        message: err.msg,
+        duration: 3500,
+      });
     }
   })
 };
